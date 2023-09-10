@@ -61,15 +61,79 @@ services:
         - /transcode_cache:/temp
     # Managing subtitles
     bazarr:
-        image: lscr.io/linuxserver/bazarr:latest
-        container_name: test-bazarr
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Etc/UTC
-        volumes:
-            - /path/to/bazarr/config:/config
-            - /path/to/movies:/media/hong/My Passport/Movies
-        ports:
-            - 6767:6767
-        restart: unless-stopped
+      image: lscr.io/linuxserver/bazarr:latest
+      container_name: test-bazarr
+      environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Etc/UTC
+      volumes:
+        - /path/to/bazarr/config:/config
+        - /path/to/movies:/media/hong/My Passport/Movies
+      ports:
+          - 6767:6767
+      restart: unless-stopped
+    # TODO: WIP from here, DO NOT PUSH
+    # Manage TV shows
+    sonarr:
+      image: lscr.io/linuxserver/sonarr:latest
+      container_name: test-sonarr
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Etc/UTC
+      volumes:
+        - /path/to/data:/config
+        - /path/to/tvseries:/media/hong/My Passport/TV_Shows
+        - /path/to/downloadclient-downloads:/downloads #optional
+      ports:
+        - 8989:8989
+      restart: unless-stopped
+    # Manage movies
+    radarr:
+      image: lscr.io/linuxserver/radarr:latest
+      container_name: test-radarr
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Etc/UTC
+      volumes:
+        - /path/to/data:/config
+        - /path/to/movies:/media/hong/My Passport/Movies
+        - /path/to/downloadclient-downloads:/downloads #optional
+      ports:
+        - 7878:7878
+      restart: unless-stopped
+    # Torrent client
+    qbittorrent:
+      image: lscr.io/linuxserver/qbittorrent:latest
+      container_name: test-qbittorrent
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Etc/UTC
+        - WEBUI_PORT=8080
+      volumes:
+        - /path/to/appdata/config:/config
+        - /path/to/downloads:/downloads
+      ports:
+        - 8080:8080
+        - 6881:6881
+        - 6881:6881/udp
+      restart: unless-stopped
+    # Media server
+    plex:
+      image: lscr.io/linuxserver/plex:latest
+      container_name: test-plex
+      network_mode: host
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Etc/UTC
+        - VERSION=docker
+        # - PLEX_CLAIM= #optional
+      volumes:
+        - /path/to/library:/config
+        - /path/to/tvseries:/media/hong/My Passport/TV_Shows
+        - /path/to/movies:/media/hong/My Passport/Movies
+      restart: unless-stopped
