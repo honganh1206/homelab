@@ -45,7 +45,7 @@ services:
       container_name: test-tdarr-node
       image: ghcr.io/haveagitgat/tdarr_node:latest
       restart: unless-stopped
-      network_mode: service:tdarr
+      network_mode: service:test-tdarr
       environment:
         - TZ=Europe/London
         - PUID=1000
