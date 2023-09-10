@@ -2,8 +2,8 @@
 version: "3.4"
 services:
     # Managing all apps
-    work-laptop-homarr:
-      container_name: homarr
+    homarr:
+      container_name: test-homarr
       image: ghcr.io/ajnart/homarr:latest
       restart: unless-stopped
       volumes:
@@ -16,8 +16,8 @@ services:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     # Transcoding
-    work-laptop-tdarr:
-      container_name: tdarr
+    test-tdarr:
+      container_name: test-tdarr
       image: ghcr.io/haveagitgat/tdarr:latest
       restart: unless-stopped
       network_mode: bridge
@@ -41,8 +41,8 @@ services:
         - /docker/tdarr/logs:/app/logs
         - /media:/media/hong/
         - /transcode_cache:/temp
-    work-laptop-tdarr-node:
-      container_name: tdarr-node
+    tdarr-node:
+      container_name: test-tdarr-node
       image: ghcr.io/haveagitgat/tdarr_node:latest
       restart: unless-stopped
       network_mode: service:tdarr
@@ -60,9 +60,9 @@ services:
         - /media:/media/hong/
         - /transcode_cache:/temp
     # Managing subtitles
-    work-laptop-bazarr:
+    bazarr:
         image: lscr.io/linuxserver/bazarr:latest
-        container_name: bazarr
+        container_name: test-bazarr
         environment:
             - PUID=1000
             - PGID=1000
