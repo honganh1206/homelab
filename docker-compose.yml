@@ -141,7 +141,7 @@ services:
         - PUID=1000
         - PGID=1000
         - TZ=Etc/UTC
-        # - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
+        - JELLYFIN_PublishedServerUrl=192.168.1.105 #optional
       volumes:
         - /path/to/library:/config/jellyfin
         - /path/to/tvseries:/media/hong/My Passport/TV_Shows
