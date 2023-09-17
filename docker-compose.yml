@@ -1,7 +1,7 @@
 # Home server
-version: "2.1"
+version: "3.5"
 services:
-    # Managing all apps
+    # # Managing all apps
     # homarr:
     #   container_name: test-homarr
     #   image: ghcr.io/ajnart/homarr:latest
@@ -55,7 +55,7 @@ services:
     #     - /docker/tdarr/logs:/app/logs
     #     - /media:/media/hong/
     #     - /transcode_cache:/temp
-    # Managing subtitles
+    # # Managing subtitles
     # bazarr:
     #   image: lscr.io/linuxserver/bazarr:latest
     #   container_name: test-bazarr
@@ -70,7 +70,7 @@ services:
     #       - 6767:6767
     #   restart: unless-stopped
     # TODO: WIP from here, DO NOT PUSH
-    # Manage TV shows
+    # # Manage TV shows
     # sonarr:
     #   image: lscr.io/linuxserver/sonarr:latest
     #   container_name: test-sonarr
@@ -85,7 +85,7 @@ services:
     #   ports:
     #     - 8989:8989
     #   restart: unless-stopped
-    # Manage movies
+    # # Manage movies
     # radarr:
     #   image: lscr.io/linuxserver/radarr:latest
     #   container_name: test-radarr
@@ -100,7 +100,7 @@ services:
     #   ports:
     #     - 7878:7878
     #   restart: unless-stopped
-    # Torrent client
+    # # Torrent client
     # qbittorrent:
     #   image: lscr.io/linuxserver/qbittorrent:latest
     #   container_name: test-qbittorrent
@@ -117,23 +117,23 @@ services:
     #     - 6881:6881
     #     - 6881:6881/udp
     #   restart: unless-stopped
-    # Media server
-    ## Plex media server
-    plex:
-      image: lscr.io/linuxserver/plex:latest
-      container_name: test-plex
-      network_mode: host
-      environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=Etc/UTC
-        - VERSION=docker
-        # - PLEX_CLAIM= #optional
-      volumes:
-        - /path/to/library:/config/plex
-        - /path/to/tvseries:/media/hong/My Passport/TV_Shows
-        - /path/to/movies:/media/hong/My Passport/Movies
-      restart: unless-stopped
+    # # Media server
+    # # Plex media server
+    # plex:
+    #   image: lscr.io/linuxserver/plex:latest
+    #   container_name: test-plex
+    #   network_mode: host
+    #   environment:
+    #     - PUID=1000
+    #     - PGID=1000
+    #     - TZ=Etc/UTC
+    #     - VERSION=docker
+    #     # - PLEX_CLAIM= #optional
+    #   volumes:
+    #     - /path/to/library:/config/plex
+    #     - /path/to/tvseries:/media/hong/My Passport/TV_Shows
+    #     - /path/to/movies:/media/hong/My Passport/Movies
+    #   restart: unless-stopped
     jellyfin:
       image: lscr.io/linuxserver/jellyfin:latest
       container_name: test-jellyfin
