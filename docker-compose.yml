@@ -149,13 +149,10 @@ services:
     #     - /path/to/movies:/media/hong/My Passport/Movies
     #   restart: unless-stopped
     jellyfin:
-        image: lscr.io/linuxserver/jellyfin:latest
-        container_name: root-jellyfin
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Etc/UTC
-            # - JELLYFIN_PublishedServerUrl=192.168.1.105 #optional
+        image: jellyfin/jellyfin
+        container_name: jellyfin
+        user: uid:gid
+        network_mode: "host"
         volumes:
             - /path/to/library:/config/jellyfin
             - /path/to/tvseries:/media/hong/My Passport/TV_Shows
