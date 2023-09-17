@@ -15,6 +15,29 @@ services:
             - 80:80
             - 443:443
         restart: unless-stopped
+    samba:
+        image: dperson/samba
+        environment:
+            - TZ=Etc/UTC
+            - SHARE=Data;/mnt;yes;no;no;hong;none;none;Data
+            - WORKGROUP=workgroup
+            - USER=hong;120600
+            - NMBD=True
+        networks:
+            - default
+        ports:
+            - "137:137/udp"
+            - "138:138/udp"
+            - "139:139/tcp"
+            - "445:445/tcp"
+        read_only: false
+        tmpfs:
+            - /tmp
+        restart: unless-stopped
+        stdin_open: true
+        tty: true
+        volumes:
+            - /media/storage:/mnt/media/My Passport
     # # Managing all apps
     # homarr:
     #   container_name: test-homarr
