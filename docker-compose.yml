@@ -37,7 +37,7 @@ services:
         stdin_open: true
         tty: true
         volumes:
-            - /media/storage:/mnt/media/My Passport
+            - /media/storage:/mnt/media/hong/My Passport
     # # Managing all apps
     # homarr:
     #   container_name: test-homarr
