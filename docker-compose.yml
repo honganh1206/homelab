@@ -202,3 +202,34 @@ services:
         ports:
             - 3579:3579
         restart: unless-stopped
+    # Manage Plex metadata
+    plex-meta-manager:
+        image: lscr.io/linuxserver/plex-meta-manager:latest
+        container_name: plex-meta-manager
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+            # - PMM_CONFIG=/config/config.yml #optional
+            # - PMM_TIME=03:00 #optional
+            # - PMM_RUN=False #optional
+            # - PMM_TEST=False #optional
+            # - PMM_NO_MISSING=False #optional
+        volumes:
+            - /path/to/appdata/config:/config
+        restart: unless-stopped
+    # Manage files downloaded from Usenet
+    sabnzbd:
+        image: lscr.io/linuxserver/sabnzbd:latest
+        container_name: sabnzbd
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+        volumes:
+            - /path/to/data:/config
+            - /path/to/downloads:/media/hong/My Passport/Download
+            - /path/to/incomplete/downloads:/media/hong/My Passport/Incomplete-Download
+        ports:
+            - 8081:8080
+        restart: unless-stopped
