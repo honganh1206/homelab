@@ -205,7 +205,7 @@ services:
     # Manage Plex metadata
     plex-meta-manager:
         image: lscr.io/linuxserver/plex-meta-manager:latest
-        container_name: plex-meta-manager
+        container_name: root-plex-meta-manager
         environment:
             - PUID=1000
             - PGID=1000
@@ -221,7 +221,7 @@ services:
     # Manage files downloaded from Usenet
     sabnzbd:
         image: lscr.io/linuxserver/sabnzbd:latest
-        container_name: sabnzbd
+        container_name: root-sabnzbd
         environment:
             - PUID=1000
             - PGID=1000
