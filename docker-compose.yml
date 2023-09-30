@@ -228,8 +228,8 @@ services:
             - TZ=Etc/UTC
         volumes:
             - /path/to/data:/media/hong/My Passport
-            - /path/to/downloads:/Download
-            - /path/to/incomplete/downloads:/Incomplete-Download
+            - /path/to/downloads:/Download/complete
+            - /path/to/incomplete/downloads:/Download/incomplete
         ports:
             - 8081:8080
         restart: unless-stopped
