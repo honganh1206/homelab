@@ -119,7 +119,7 @@ services:
     # - PMM_TEST=False #optional
     # - PMM_NO_MISSING=False #optional
     volumes:
-    - ./plex-meta-manager/config:/config
+    - /home/hongplex-meta-manager/config:/config
     restart: unless-stopped
   letterboxd-list-radarr:
         image: screeny05/letterboxd-list-radarr:latest
@@ -167,7 +167,7 @@ services:
   samba:
     image: dperson/samba
     env_file: 
-      - .env.home_server
+      - .env
     environment:
       - TZ='Asia/Ho_Chi_Minh'
       - SHARE=Data;/mnt;yes;no;no;hong;none;none;Data
