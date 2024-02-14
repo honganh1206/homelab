@@ -7,9 +7,9 @@ services:
     image: ghcr.io/ajnart/homarr:latest
     restart: unless-stopped
     volumes:
-      - ./homarr/configs:/app/data/configs
-      - ./homarr/data:/data
-      - ./homarr/icons:/app/public/icons
+      - ../assets/homarr/configs:/app/data/configs
+      - ../assets/homarr/data:/data
+      - ../assets/homarr/icons:/app/public/icons
     ports:
       - '7575:7575'
   watchtower:
@@ -68,9 +68,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-    volumes:
-      - /path/to/bazarr/config:/config
-      - /path/to/movies:/media/hong/My Passport/Movies
+    volumes:  
+      - ../assets/bazarr/config:/config
+      - /media/hong/My Passport1/Movies:/movies
+      - /media/hong/My Passport1/TV_Shows:/tv
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -104,7 +105,7 @@ services:
     restart: unless-stopped
   plex-meta-manager:
     image: meisnate12/plex-meta-manager # lscr.io/linuxserver/plex-meta-manager:latest
-    command: python plex_meta_manager.py -r # start python script to load metadata overlay
+    command: python plex-meta-manager.py -r # start python script to load metadata overlay
     container_name: plex-meta-manager
     # extra_hosts:
     # - "host.docker.internal:host-gateway"
@@ -119,7 +120,7 @@ services:
     # - PMM_TEST=False #optional
     # - PMM_NO_MISSING=False #optional
     volumes:
-    - /home/hongplex-meta-manager/config:/config
+    - ../assets/plex-meta-manager/config:/config
     restart: unless-stopped
   letterboxd-list-radarr:
         image: screeny05/letterboxd-list-radarr:latest
@@ -140,9 +141,9 @@ services:
           - TZ=Etc/UTC
           # - JELLYFIN_PublishedServerUrl=192.168.1.105 #optional
       volumes:
-          - ./jellyfin/config:/config/jellyfin
-          - /media/hong/My Passport/TV_Shows:/data/tvshows
-          - /media/hong/My Passport/Movies:/data/movies
+          - ../assets/jellyfin/config:/config/jellyfin
+          - /media/hong/My Passport1/TV_Shows:/data/tvshows
+          - /media/hong/My Passport1/Movies:/data/movies
       ports:
           - 8096:8096
           # - 8920:8920 #optional
@@ -158,9 +159,9 @@ services:
       - TZ=Etc/UTC
       - CLI_ARGS= #optional
     volumes:
-      - /path/to/appdata/config:/config
-      - /path/to/backups:/backups
-      - /path/to/source:/source
+      - ../assets/config:/config
+      - /media/hong/My Passport1/Backup:/backups
+      - /media/hong/My Passport1:/source
     ports:
       - 8200:8200
     restart: unless-stopped
@@ -189,7 +190,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /media/hong/My Passport:/mnt:z
+      - /media/hong/My Passport1:/mnt:z
       - /home:/mnt2:x
 networks:
   default:
