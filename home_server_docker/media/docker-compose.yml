@@ -62,7 +62,7 @@ services:
         # - PMM_TEST=False #optional
         # - PMM_NO_MISSING=False #optional
         volumes:
-            - ../../../assets/plex-meta-manager/config:/config
+            - ../../assets/media/plex-meta-manager/config:/config
         restart: unless-stopped
     letterboxd-list-radarr:
         image: screeny05/letterboxd-list-radarr:latest
@@ -83,7 +83,7 @@ services:
             - TZ=Etc/UTC
             # - JELLYFIN_PublishedServerUrl=192.168.1.105 #optional
         volumes:
-            - ../../../assets/jellyfin/config:/config/jellyfin
+            - ../../assets/media/jellyfin/config:/config/jellyfin
             - /media/hong/WesternDigital/Torrents/TV_Shows:/data/tvshows
             - /media/hong/WesternDigital/Torrents/Movies:/data/movies
             - /media/hong/SeagateExpansion/Torrents/TV_Shows:/data/tvshows

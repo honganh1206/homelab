@@ -4,4 +4,4 @@ homarr/
 plex-meta-manager/
 
 
-.env
+*.env

@@ -9,7 +9,7 @@ services:
             - TZ=Etc/UTC
             - WEBUI_PORT=8082
         volumes:
-            - ../../../assets/qbit/config:/config
+            - ../../assets/torrents/qbit/config:/config
             - /media/hong/SeagateExpansion/Torrents:/downloads
         ports:
             - 8082:8082
@@ -24,7 +24,7 @@ services:
             - PGID=1000
             - TZ=Etc/UTC
         volumes:
-            - ../../../assets/bazarr/config:/config
+            - ../../assets/torrents/bazarr/config:/config
             - /media/hong/WesternDigital/Torrents/Movies:/movies
             - /media/hong/WesternDigital/Torrents/TV_Shows:/tv
             - /media/hong/SeagateExpansion/Torrents/Movies:/movies

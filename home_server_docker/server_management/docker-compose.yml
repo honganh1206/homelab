@@ -7,9 +7,9 @@ services:
         image: ghcr.io/ajnart/homarr:latest
         restart: unless-stopped
         volumes:
-            - ../../../assets/homarr/configs:/app/data/configs
-            - ../../../assets/homarr/data:/data
-            - ../../../assets/homarr/icons:/app/public/icons
+            - ../../assets/server_management/homarr/configs:/app/data/configs
+            - ../../assets/server_management/homarr/data:/data
+            - ../../assets/server_management/homarr/icons:/app/public/icons
         ports:
             - "7575:7575"
     watchtower:
@@ -52,7 +52,7 @@ services:
             - TZ=Etc/UTC
             - CLI_ARGS= #optional
         volumes:
-            - ../../../assets/config:/config
+            - ../../assets/server_management/duplicati/config:/config
             - /media/hong/SeagateExpansion/Pictures/Backup:/backups
             - /media/hong/WesternDigital/Pictures:/source
         ports:
@@ -85,7 +85,7 @@ services:
         tty: true
         volumes:
             - /media/hong/WesternDigital:/mnt:z
-            - /media/hong/SeagateExpansion:/mnt2:z
-            - /home:/mnt3:x
+            - /media/hong/SeagateExpansion:/mnt2:x
+            - /home:/mnt3:v
 networks:
     default:
