@@ -1,0 +1,91 @@
+# Home server
+version: "3.7"
+services:
+    # Dashboard for all apps
+    homarr:
+        container_name: homarr
+        image: ghcr.io/ajnart/homarr:latest
+        restart: unless-stopped
+        volumes:
+            - ../../../assets/homarr/configs:/app/data/configs
+            - ../../../assets/homarr/data:/data
+            - ../../../assets/homarr/icons:/app/public/icons
+        ports:
+            - "7575:7575"
+    watchtower:
+        image: containrrr/watchtower
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+    # Rustdesk remote server
+    hbbs:
+        container_name: hbbs
+        # ports:
+        #   - 21115:21115
+        #   - 21116:21116
+        #   - 21116:21116/udp
+        #   - 21118:21118
+        image: rustdesk/rustdesk-server:latest
+        command: hbbs -r 127.0.0.1:21117
+        volumes:
+            - ./data:/root
+        network_mode: "host"
+        depends_on:
+            - hbbr
+        restart: unless-stopped
+    hbbr:
+        container_name: hbbr
+        # ports:
+        #   - 21117:21117
+        #   - 21119:21119
+        image: rustdesk/rustdesk-server:latest
+        command: hbbr
+        volumes:
+            - ./data:/root
+        network_mode: "host"
+        restart: unless-stopped
+    duplicati:
+        image: lscr.io/linuxserver/duplicati:latest
+        container_name: duplicati
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+            - CLI_ARGS= #optional
+        volumes:
+            - ../../../assets/config:/config
+            - /media/hong/SeagateExpansion/Pictures/Backup:/backups
+            - /media/hong/WesternDigital/Pictures:/source
+        ports:
+            - 8200:8200
+        restart: unless-stopped
+    samba:
+        image: dperson/samba
+        env_file:
+            - server_management.env
+        environment:
+            - TZ='Asia/Ho_Chi_Minh'
+            - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital
+            - SHARE=SeagateExpansion;/mnt2;yes;no;no;hong;none;none;SeagateExpansion
+            - SHARE=HomeServer;/mnt3;yes;no;no;hong;none;none;HomeServer
+            - WORKGROUP=workgroup
+            - USER=SERVER_USERNAME;SERVER_PASSWORD
+            - NMBD=True
+        networks:
+            - default
+        ports:
+            - "137:137/udp"
+            - "138:138/udp"
+            - "139:139/tcp"
+            - "445:445/tcp"
+        read_only: false
+        tmpfs:
+            - /tmp
+        restart: unless-stopped
+        stdin_open: true
+        tty: true
+        volumes:
+            - /media/hong/WesternDigital:/mnt:z
+            - /media/hong/SeagateExpansion:/mnt2:z
+            - /home:/mnt3:x
+networks:
+    default:

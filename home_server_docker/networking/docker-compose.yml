@@ -2,23 +2,45 @@ version: "3.7"
 
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:80/tcp"
-    environment:
-      TZ: 'America/Chicago'
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
-    volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    cap_add:
-      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-    restart: unless-stopped
+    # pihole:
+    #   container_name: pihole
+    #   image: pihole/pihole:latest
+    #   # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    #   ports:
+    #     - "53:53/tcp"
+    #     - "53:53/udp"
+    #     - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+    #     - "80:80/tcp"
+    #   environment:
+    #     TZ: 'America/Chicago'
+    #     # WEBPASSWORD: 'set a secure password here or it will be random'
+    #   # Volumes store your data between container upgrades
+    #   volumes:
+    #     - './etc-pihole:/etc/pihole'
+    #     - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    #   #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    #   cap_add:
+    #     - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    #   restart: unless-stopped
+    home_server_tailscale:
+        image: tailscale/tailscale:latest
+        container_name: home_server_tailscale
+        hostname: home_server_tailscale
+        env_file:
+            - networking.env
+        environment:
+            - TS_AUTHKEY=SERVER_TAILSCALE_AUTHKEY
+            # - TS_EXTRA_ARGS=--advertise-tags=tag:container
+            - TS_STATE_DIR=/var/lib/tailscale
+        volumes:
+            - ${PWD}/home_server_tailscale/state:/var/lib/tailscale
+            - /dev/net/tun:/dev/net/tun
+        cap_add:
+            - net_admin
+            - sys_module
+        restart: unless-stopped
+    nginx:
+        image: nginx
+        depends_on:
+            - home_server_tailscale
+        network_mode: service:home_server_tailscale
