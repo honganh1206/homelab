@@ -10,7 +10,7 @@ services:
             - WEBUI_PORT=8082
         volumes:
             - ../../assets/torrents/qbit/config:/config
-            - /media/hong/WesternDigital/Torrents:/downloads
+            - /media/hong/SeagateExpansion/Torrents:/downloads
         ports:
             - 8082:8082
             - 6881:6881
