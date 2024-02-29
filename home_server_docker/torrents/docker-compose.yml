@@ -16,24 +16,24 @@ services:
             - 6881:6881
             - 6881:6881/udp
         restart: unless-stopped
-    flood:
-        image: jesec/flood:latest
-        container_name: flood
-        restart: always
-        depends_on:
-            - qbittorrent
-        user: 1000:1000
-        volumes:
-            - ./flood_config:/config
-            - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
-            - /etc/localtime:/etc/localtime:ro
-        ports:
-            - 3000:3000
-        command:
-            - --auth=none
-            - --qburl=http://192.168.0.138:8082
-            - --qbuser=admin
-            - --qbpass=adminadmin
+    # flood:
+    #     image: jesec/flood:latest
+    #     container_name: flood
+    #     restart: always
+    #     depends_on:
+    #         - qbittorrent
+    #     user: 1000:1000
+    #     volumes:
+    #         - ./flood_config:/config
+    #         - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
+    #         - /etc/localtime:/etc/localtime:ro
+    #     ports:
+    #         - 3000:3000
+    #     command:
+    #         - --auth=none
+    #         - --qburl=http://192.168.0.138:8082
+    #         - --qbuser=admin
+    #         - --qbpass=adminadmin
     bazarr:
         image: lscr.io/linuxserver/bazarr:latest
         container_name: bazarr
@@ -46,7 +46,7 @@ services:
             - /media/hong/WesternDigital/Torrents/Movies:/movies
             - /media/hong/WesternDigital/Torrents/TV_Shows:/tv
             - /media/hong/SeagateExpansion/Torrents/Movies:/movies
-            - /media/hong/SeagateExpansion/Torrents/TV_Shows:/tv
+            - /media/hong/SeagateExpansion/Torrents/Shows:/tv
         ports:
             - 6767:6767
         restart: unless-stopped

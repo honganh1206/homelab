@@ -86,7 +86,7 @@ services:
             - ../../assets/media/jellyfin/config:/config/jellyfin
             - /media/hong/WesternDigital/Torrents/TV_Shows:/data/tvshows
             - /media/hong/WesternDigital/Torrents/Movies:/data/movies
-            - /media/hong/SeagateExpansion/Torrents/TV_Shows:/data/tvshows
+            - /media/hong/SeagateExpansion/Torrents/Shows:/data/tvshows
             - /media/hong/SeagateExpansion/Torrents/Movies:/data/movies
         ports:
             - 8096:8096
