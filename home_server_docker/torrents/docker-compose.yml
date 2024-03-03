@@ -28,7 +28,7 @@ services:
             - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
             - /etc/localtime:/etc/localtime:ro
         ports:
-            - 3000:3000
+            - 3001:3001
         command:
             - --auth=none
             - --qburl=http://192.168.0.138:8082
