@@ -11,7 +11,7 @@ services:
         volumes:
             - ../../assets/torrents/qbit/config:/config
             - /downloads:/downloads
-            - /media/hong/SeagateExpansion/Torrents:/media
+            - /media:/media
         ports:
             - 8082:8082
             - 6881:6881
