@@ -10,7 +10,8 @@ services:
             - WEBUI_PORT=8082
         volumes:
             - ../../assets/torrents/qbit/config:/config
-            - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
+            - /downloads:/downloads
+            - /media/hong/SeagateExpansion/Torrents:/media
         ports:
             - 8082:8082
             - 6881:6881
@@ -24,10 +25,11 @@ services:
             - qbittorrent
         user: 1000:1000
         env_file:
-          - torrents.env
+            - torrents.env
         volumes:
-            - ./flood_config:/config
-            - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
+            - ../../aseets/torrents/flood/config:/config
+            - /downloads:/downloads
+            - /media/hong/SeagateExpansion/Torrents:/media
             - /etc/localtime:/etc/localtime:ro
         ports:
             - 3001:3001
