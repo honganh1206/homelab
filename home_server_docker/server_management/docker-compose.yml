@@ -43,21 +43,21 @@ services:
             - ./data:/root
         network_mode: "host"
         restart: unless-stopped
-    # duplicati:
-    #     image: lscr.io/linuxserver/duplicati:latest
-    #     container_name: duplicati
-    #     environment:
-    #         - PUID=1000
-    #         - PGID=1000
-    #         - TZ=Etc/UTC
-    #         - CLI_ARGS= #optional
-    #     volumes:
-    #         - ../../assets/server_management/duplicati/config:/config
-    #         - /media/hong/SeagateExpansion/Pictures/Backup:/backups
-    #         - /media/hong/WesternDigital/Pictures:/source
-    #     ports:
-    #         - 8200:8200
-    #     restart: unless-stopped
+    duplicati:
+        image: lscr.io/linuxserver/duplicati:latest
+        container_name: duplicati
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+            - CLI_ARGS= #optional
+        volumes:
+            - ../../assets/server_management/duplicati/config:/config
+            - /media/hong/WesternDigital:/backups
+            - /media/hong/SeagateExpansion:/source
+        ports:
+            - 8200:8200
+        restart: unless-stopped
     # samba:
     #     image: dperson/samba
     #     env_file:
