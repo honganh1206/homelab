@@ -47,8 +47,8 @@ services:
         image: lscr.io/linuxserver/duplicati:latest
         container_name: duplicati
         environment:
-            - PUID=1000
-            - PGID=1000
+            - PUID=0
+            - PGID=0
             - TZ=Etc/UTC
             - CLI_ARGS= #optional
         volumes:
