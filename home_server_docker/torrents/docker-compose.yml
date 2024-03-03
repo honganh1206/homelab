@@ -23,6 +23,8 @@ services:
         depends_on:
             - qbittorrent
         user: 1000:1000
+        env_file:
+          - torrents.env
         volumes:
             - ./flood_config:/config
             - /media/hong/SeagateExpansion/Torrents/downloads:/downloads
@@ -31,9 +33,9 @@ services:
             - 3001:3001
         command:
             - --auth=none
-            - --qburl=http://192.168.0.138:8082
-            - --qbuser=admin
-            - --qbpass=adminadmin
+            - --qburl=http://192.168.1.105:8082
+            - --qbuser=QBIT_USERNAME
+            - --qbpass=QBIT_PASSWORD
     bazarr:
         image: lscr.io/linuxserver/bazarr:latest
         container_name: bazarr
