@@ -53,8 +53,8 @@ services:
             - CLI_ARGS= #optional
         volumes:
             - ../../assets/server_management/duplicati/config:/config
-            - ./Media/WesternDigital/Backup:/backups
-            - ./Media/SeagateExpansion:/source
+            - /home/hong/Media/WesternDigital/Backup:/backups
+            - /home/hong/Media/SeagateExpansion:/source
         ports:
             - 8200:8200
         restart: unless-stopped
@@ -84,7 +84,7 @@ services:
         stdin_open: true
         tty: true
         volumes:
-            - ./Media/WesternDigital:/mnt:z
-            - ./Media/SeagateExpansion:/mnt2:x
+            - /home/hong/Media/WesternDigital:/mnt:z
+            - /home/hong/Media/SeagateExpansion:/mnt2:x
 networks:
     default:

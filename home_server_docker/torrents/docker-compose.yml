@@ -10,8 +10,8 @@ services:
             - WEBUI_PORT=8082
         volumes:
             - ../../assets/torrents/qbit/config:/config
-            - ./Downloads:/downloads
-            - ./Media:/media
+            - /home/hong/Downloads:/downloads
+            - /home/hong/Media:/media
         ports:
             - 8082:8082
             - 6881:6881
@@ -29,7 +29,7 @@ services:
         volumes:
             - ../../aseets/torrents/flood/config:/config
             - /downloads:/downloads
-            - ./Media/SeagateExpansion/Torrents:/media
+            - /home/hong/Media/SeagateExpansion/Torrents:/media
             - /etc/localtime:/etc/localtime:ro
         ports:
             - 3001:3001
@@ -47,10 +47,10 @@ services:
             - TZ=Etc/UTC
         volumes:
             - ../../assets/torrents/bazarr/config:/config
-            - ./Media/WesternDigital/Torrents/Movies:/movies
-            - ./Media/WesternDigital/Torrents/TV_Shows:/tv
-            - ./Media/SeagateExpansion/Torrents/Movies:/movies
-            - ./Media/SeagateExpansion/Torrents/Shows:/tv
+            - /home/hong/Media/WesternDigital/Torrents/Movies:/movies
+            - /home/hong/Media/WesternDigital/Torrents/TV_Shows:/tv
+            - /home/hong/Media/SeagateExpansion/Torrents/Movies:/movies
+            - /home/hong/Media/SeagateExpansion/Torrents/Shows:/tv
         ports:
             - 6767:6767
         restart: unless-stopped
