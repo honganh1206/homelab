@@ -10,8 +10,8 @@ services:
             - WEBUI_PORT=8082
         volumes:
             - ../../assets/torrents/qbit/config:/config
-            - /downloads:/downloads
-            - /media:/media
+            - ./Downloads:/downloads
+            - ./Media:/media
         ports:
             - 8082:8082
             - 6881:6881
