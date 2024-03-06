@@ -53,39 +53,38 @@ services:
             - CLI_ARGS= #optional
         volumes:
             - ../../assets/server_management/duplicati/config:/config
-            - /media/hong/WesternDigital:/backups
-            - /media/hong/SeagateExpansion:/source
+            - ./Media/WesternDigital/Backup:/backups
+            - ./Media/SeagateExpansion:/source
         ports:
             - 8200:8200
         restart: unless-stopped
-    # samba:
-    #     image: dperson/samba
-    #     env_file:
-    #         - server_management.env
-    #     environment:
-    #         - TZ='Asia/Ho_Chi_Minh'
-    #         - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital
-    #         - SHARE=SeagateExpansion;/mnt2;yes;no;no;hong;none;none;SeagateExpansion
-    #         - SHARE=HomeServer;/mnt3;yes;no;no;hong;none;none;HomeServer
-    #         - WORKGROUP=workgroup
-    #         - USER=SERVER_USERNAME;SERVER_PASSWORD
-    #         - NMBD=True
-    #     networks:
-    #         - default
-    #     ports:
-    #         - "137:137/udp"
-    #         - "138:138/udp"
-    #         - "139:139/tcp"
-    #         - "445:445/tcp"
-    #     read_only: false
-    #     tmpfs:
-    #         - /tmp
-    #     restart: unless-stopped
-    #     stdin_open: true
-    #     tty: true
-    #     volumes:
-    #         - /media/hong/WesternDigital:/mnt:z
-    #         - /media/hong/SeagateExpansion:/mnt2:x
-    #         - /home:/mnt3:v
+    samba:
+        image: dperson/samba
+        env_file:
+            - server_management.env
+        environment:
+            - TZ='Asia/Ho_Chi_Minh'
+            - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital
+            - SHARE=SeagateExpansion;/mnt2;yes;no;no;hong;none;none;SeagateExpansion
+            - SHARE=HomeServer;/mnt3;yes;no;no;hong;none;none;HomeServer
+            - WORKGROUP=workgroup
+            - USER=SERVER_USERNAME;SERVER_PASSWORD
+            - NMBD=True
+        networks:
+            - default
+        ports:
+            - "137:137/udp"
+            - "138:138/udp"
+            - "139:139/tcp"
+            - "445:445/tcp"
+        read_only: false
+        tmpfs:
+            - /tmp
+        restart: unless-stopped
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./Media/WesternDigital:/mnt:z
+            - ./Media/SeagateExpansion:/mnt2:x
 networks:
     default:
