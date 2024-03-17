@@ -86,5 +86,19 @@ services:
         volumes:
             - /home/hong/Media/WesternDigital:/mnt:z
             - /home/hong/Media/SeagateExpansion:/mnt2:x
+    guacamole:
+      image: jwetzell/guacamole
+      container_name: guacamole
+      restart: unless-stopped
+      volumes:
+        - ../../aseets/server_management/guacamole/postgres:/config
+      ports:
+        - 8083:8083
+volumes:
+  postgres:
+    driver: local
+
 networks:
-    default:
+  default:
+    name: server_management
+    external: true
