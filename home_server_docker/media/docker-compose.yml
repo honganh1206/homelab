@@ -51,7 +51,7 @@ services:
         container_name: plex-meta-manager
         # extra_hosts:
         # - "host.docker.internal:host-gateway"
-        # user: PUID}:${PGID
+        # user: "${PUID}:${PGID}"
         environment:
             - TZ=TIMEZONE #optional
         # - PUID=${PUID}

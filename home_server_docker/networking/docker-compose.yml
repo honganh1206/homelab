@@ -29,7 +29,7 @@ services:
         env_file:
             - networking.env
         environment:
-            - TS_AUTHKEY=SERVER_TAILSCALE_AUTHKEY
+            - TS_AUTHKEY="${SERVER_TAILSCALE_AUTHKEY}"
             # - TS_EXTRA_ARGS=--advertise-tags=tag:container
             - TS_STATE_DIR=/var/lib/tailscale
         volumes:

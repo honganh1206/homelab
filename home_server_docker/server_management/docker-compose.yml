@@ -68,7 +68,7 @@ services:
             - SHARE=SeagateExpansion;/mnt2;yes;no;no;hong;none;none;SeagateExpansion
             - SHARE=HomeServer;/mnt3;yes;no;no;hong;none;none;HomeServer
             - WORKGROUP=workgroup
-            - USER=SERVER_USERNAME};${SERVER_PASSWORD
+            - USER="${SERVER_USERNAME};${SERVER_PASSWORD}"
             - NMBD=True
         networks:
             - default
