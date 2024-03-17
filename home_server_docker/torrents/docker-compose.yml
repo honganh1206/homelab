@@ -13,7 +13,7 @@ services:
             - /downloads:/downloads
             - /media:/media
         ports:
-            - 8082:8082
+            - 8082:8080
             - 6881:6881
             - 6881:6881/udp
         restart: unless-stopped

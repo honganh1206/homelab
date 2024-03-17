@@ -27,7 +27,7 @@ services:
         image: rustdesk/rustdesk-server:latest
         command: hbbs -r 127.0.0.1:21117
         volumes:
-            - ./data:/root
+            - ../../assets/server_management/rustdesk/hbbs/data:/root
         network_mode: "host"
         depends_on:
             - hbbr
@@ -40,7 +40,7 @@ services:
         image: rustdesk/rustdesk-server:latest
         command: hbbr
         volumes:
-            - ./data:/root
+            - ../../assets/server_management/rustdesk/hbbr/data:/root
         network_mode: "host"
         restart: unless-stopped
     duplicati:
