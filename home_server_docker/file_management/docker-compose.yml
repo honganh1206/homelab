@@ -1,49 +1,28 @@
 version: "3.7"
 
 services:
-    nextcloud:
-        image: lscr.io/linuxserver/nextcloud
-        container_name: nextcloud
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Europe/London
+    db:
+        image: mariadb:10.6
+        restart: always
+        command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
         volumes:
-            - ../../assets/file_management/nextcloud/config:/config
-            - ../../assets/file_management/nextcloud/data:/data
-        depends_on:
-            - mariadb
-        restart: unless-stopped
-    mariadb:
-        image: lscr.io/linuxserver/mariadb
-        container_name: mariadb
+            - ../../assets/file_management/nextclouddb:/var/lib/mysql
         environment:
-            - PUID=1000
-            - PGID=1000
-            - MYSQL_ROOT_PASSWORD=mariadbpassword
-            - TZ=Europe/London
+            - MYSQL_ROOT_PASSWORD=
+            - MYSQL_PASSWORD=
             - MYSQL_DATABASE=nextcloud
-            - MYSQL_USER=ncuser
-            - MYSQL_PASSWORD=ncpassword
-        volumes:
-            - ../../assets/file_management/mariadb:/config
-        restart: unless-stopped
-    swag:
-        image: lscr.io/linuxserver/swag
-        container_name: swag
-        cap_add:
-            - NET_ADMIN
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Europe/London
-            - URL=linuxserver-test.duckdns.org
-            - SUBDOMAINS=wildcard
-            - VALIDATION=duckdns
-            - DUCKDNSTOKEN=97654867496t0877648659765854
-        volumes:
-            - ../../assets/file_management/swag:/config
+            - MYSQL_USER=nextcloud
+    app:
+        image: nextcloud
+        restart: always
         ports:
-            - 443:443
-            - 80:80
-        restart: unless-stopped
+            - 8081:80
+        links:
+            - db
+        volumes:
+            - ../../assets/file_management/nextcloud:/var/www/html
+        environment:
+            - MYSQL_PASSWORD=
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+            - MYSQL_HOST=db
