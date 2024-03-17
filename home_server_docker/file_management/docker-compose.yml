@@ -8,8 +8,8 @@ services:
         volumes:
             - ../../assets/file_management/nextclouddb:/var/lib/mysql
         environment:
-            - MYSQL_ROOT_PASSWORD=
-            - MYSQL_PASSWORD=
+            - MYSQL_ROOT_PASSWORD=dbpassword
+            - MYSQL_PASSWORD=dbpassword
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
     app:
@@ -22,7 +22,7 @@ services:
         volumes:
             - ../../assets/file_management/nextcloud:/var/www/html
         environment:
-            - MYSQL_PASSWORD=
+            - MYSQL_PASSWORD=dbpassword
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
             - MYSQL_HOST=db
