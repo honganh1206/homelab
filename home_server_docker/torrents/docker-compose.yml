@@ -25,8 +25,7 @@ services:
             - qbittorrent
         user: 1000:1000
         env_file:
-            - path: ./torrents.env
-            - required: true
+            - torrents.env
         volumes:
             - ../../aseets/torrents/flood/config:/config
             - /downloads:/downloads
@@ -37,8 +36,8 @@ services:
         command:
             - --auth=none
             - --qburl=http://192.168.1.105:8082
-            - --qbuser=QBIT_USERNAME
-            - --qbpass=QBIT_PASSWORD
+            - --qbuser="${QBIT_USERNAME}"
+            - --qbpass="${QBIT_PASSWORD}"
     bazarr:
         image: lscr.io/linuxserver/bazarr:latest
         container_name: bazarr

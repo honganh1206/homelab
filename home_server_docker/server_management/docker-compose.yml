@@ -61,15 +61,14 @@ services:
     samba:
         image: dperson/samba
         env_file:
-            - path: ./server_management.env
-            - required: true
+            - server_management.env
         environment:
             - TZ='Asia/Ho_Chi_Minh'
             - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital
             - SHARE=SeagateExpansion;/mnt2;yes;no;no;hong;none;none;SeagateExpansion
             - SHARE=HomeServer;/mnt3;yes;no;no;hong;none;none;HomeServer
             - WORKGROUP=workgroup
-            - USER=SERVER_USERNAME;SERVER_PASSWORD
+            - USER="${SERVER_USERNAME};${SERVER_PASSWORD}"
             - NMBD=True
         networks:
             - default
