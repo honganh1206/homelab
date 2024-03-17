@@ -2,91 +2,48 @@ version: "3.7"
 
 services:
     nextcloud:
-        image: nextcloud
+        image: lscr.io/linuxserver/nextcloud
         container_name: nextcloud
-        restart: unless-stopped
-        networks:
-            - cloud
-        depends_on:
-            - nextclouddb
-            - redis
-        ports:
-            - 8081:80
-        volumes:
-            - ../../assets/file_management/nextcloud/html:/var/www/html
-            - ../../assets/file_management/nextcloud/custom_apps:/var/www/html/custom_apps
-            - ../../assets/file_management/nextcloud/config:/var/www/html/config
-            - ../../assets/file_management/nextcloud/data:/var/www/html/data
         environment:
             - PUID=1000
             - PGID=1000
-            - TZ=America/Los_Angeles
-            - MYSQL_DATABASE=nextcloud
-            - MYSQL_USER=nextcloud
-            - MYSQL_PASSWORD=dbpassword
-            - MYSQL_HOST=nextclouddb
-            - REDIS_HOST=redis
-
-    nextclouddb:
-        image: mariadb
-        container_name: nextcloud-db
-        restart: unless-stopped
-        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-        networks:
-            - cloud
+            - TZ=Europe/London
         volumes:
-            - ../../assets/file_management/nextcloud/nextclouddb:/var/lib/mysql
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=America/Los_Angeles
-            - MYSQL_RANDOM_ROOT_PASSWORD=true
-            - MYSQL_PASSWORD=dbpassword
-            - MYSQL_DATABASE=nextcloud
-            - MYSQL_USER=nextcloud
-
-    collabora:
-        image: collabora/code
-        container_name: collabora
-        restart: unless-stopped
-        networks:
-            - cloud
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=America/Los_Angeles
-            - password=password
-            - username=nextcloud
-            - domain=example.com
-            - extra_params=--o:ssl.enable=true
-        ports:
-            - 9980:9980
-
-    redis:
-        image: redis:alpine
-        container_name: redis
-        volumes:
-            - ../../assets/file_management/nextcloud/redis:/data
-        networks:
-            - cloud
-
-    nginx-proxy:
-        image: "jc21/nginx-proxy-manager:latest"
-        container_name: nginx-proxy
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=America/Los_Angeles
-        restart: unless-stopped
-        ports:
-            - "80:80"
-            - "81:81"
-            - "443:443"
-        volumes:
+            - ../../assets/file_management/nextcloud/config:/config
             - ../../assets/file_management/nextcloud/data:/data
-            - ../../assets/file_management/nextcloud/letsencrypt:/etc/letsencrypt
-
-networks:
-    cloud:
-        name: cloud
-        driver: bridge
+        depends_on:
+            - mariadb
+        restart: unless-stopped
+    mariadb:
+        image: lscr.io/linuxserver/mariadb
+        container_name: mariadb
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - MYSQL_ROOT_PASSWORD=mariadbpassword
+            - TZ=Europe/London
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=ncuser
+            - MYSQL_PASSWORD=ncpassword
+        volumes:
+            - ../../assets/file_management/mariadb:/config
+        restart: unless-stopped
+    swag:
+        image: lscr.io/linuxserver/swag
+        container_name: swag
+        cap_add:
+            - NET_ADMIN
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/London
+            - URL=linuxserver-test.duckdns.org
+            - SUBDOMAINS=wildcard
+            - VALIDATION=duckdns
+            - DUCKDNSTOKEN=97654867496t0877648659765854
+        volumes:
+            - ../../assets/file_management/swag:/config
+        ports:
+            - 443:443
+            - 80:80
+        restart: unless-stopped
