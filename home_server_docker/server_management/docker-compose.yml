@@ -61,7 +61,8 @@ services:
     samba:
         image: dperson/samba
         env_file:
-            - server_management.env
+            - path: ./server_management.env
+            - required: true
         environment:
             - TZ='Asia/Ho_Chi_Minh'
             - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital

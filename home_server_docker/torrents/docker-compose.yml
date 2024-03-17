@@ -25,7 +25,8 @@ services:
             - qbittorrent
         user: 1000:1000
         env_file:
-            - torrents.env
+            - path: ./torrents.env
+            - required: true
         volumes:
             - ../../aseets/torrents/flood/config:/config
             - /downloads:/downloads
