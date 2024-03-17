@@ -24,8 +24,6 @@ services:
         depends_on:
             - qbittorrent
         user: 1000:1000
-        env_file:
-            - torrents.env
         volumes:
             - ../../aseets/torrents/flood/config:/config
             - /downloads:/downloads

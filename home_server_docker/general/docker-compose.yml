@@ -18,8 +18,6 @@ services:
     db:
         image: mariadb:10.11
         container_name: seafile-mysql
-        # env_file:
-        #     - general.env
         environment:
             - MYSQL_ROOT_PASSWORD="${SEAFILE_DB_MYSQL_ROOT_PASSWORD}" # Requested, set the root's password of MySQL service.
             - MYSQL_LOG_CONSOLE=true
@@ -42,8 +40,6 @@ services:
         #     - "443:443"  # If https is enabled, cancel the comment.
         volumes:
             - ../../assets/general/seafile/data:/shared # Requested, specifies the path to Seafile data persistent store.
-        # env_file:
-        #     - general.env
         environment:
             - DB_HOST=db
             - DB_ROOT_PASSWD="${SEAFILE_DB_MYSQL_ROOT_PASSWORD}" # Requested, the value should be root's password of MySQL service.

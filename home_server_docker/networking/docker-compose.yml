@@ -26,8 +26,6 @@ services:
         image: tailscale/tailscale:latest
         container_name: tailscale
         hostname: honganh-homelab-docker-installation
-        env_file:
-            - networking.env
         environment:
             - TS_AUTHKEY="${SERVER_TAILSCALE_AUTHKEY}"
             # - TS_EXTRA_ARGS=--advertise-tags=tag:container

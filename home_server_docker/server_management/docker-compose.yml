@@ -60,8 +60,6 @@ services:
         restart: unless-stopped
     samba:
         image: dperson/samba
-        env_file:
-            - server_management.env
         environment:
             - TZ='Asia/Ho_Chi_Minh'
             - SHARE=WesternDigital;/mnt;yes;no;no;hong;none;none;WesternDigital
