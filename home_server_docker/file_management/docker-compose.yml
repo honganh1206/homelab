@@ -13,10 +13,10 @@ services:
         ports:
             - 8081:80
         volumes:
-            - ../../assets/file_management/nextcloud/html:/var/www/html
-            - ../../assets/file_management/nextcloud/custom_apps:/var/www/html/custom_apps
-            - ../../assets/file_management/nextcloud/config:/var/www/html/config
-            - ../../assets/file_management/nextcloud/data:/var/www/html/data
+            - ./html:/var/www/html
+            - ./custom_apps:/var/www/html/custom_apps
+            - ./config:/var/www/html/config
+            - ./data:/var/www/html/data
         environment:
             - PUID=1000
             - PGID=1000
@@ -35,7 +35,7 @@ services:
         networks:
             - cloud
         volumes:
-            - ../../assets/file_management/nextcloud/nextclouddb:/var/lib/mysql
+            - ./nextclouddb:/var/lib/mysql
         environment:
             - PUID=1000
             - PGID=1000
@@ -66,7 +66,7 @@ services:
         image: redis:alpine
         container_name: redis
         volumes:
-            - ../../assets/file_management/nextcloud/redis:/data
+            - ./redis:/data
         networks:
             - cloud
 
@@ -83,8 +83,8 @@ services:
             - "81:81"
             - "443:443"
         volumes:
-            - ../../assets/file_management/nextcloud/data:/data
-            - ../../assets/file_management/nextcloud/letsencrypt:/etc/letsencrypt
+            - ./data:/data
+            - ./letsencrypt:/etc/letsencrypt
 
 networks:
     cloud:
