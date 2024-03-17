@@ -87,16 +87,16 @@ services:
             - /home/hong/Media/WesternDigital:/mnt:z
             - /home/hong/Media/SeagateExpansion:/mnt2:x
     guacamole:
-      image: jwetzell/guacamole
-      container_name: guacamole
-      restart: unless-stopped
-      volumes:
-        - ../../aseets/server_management/guacamole/postgres:/config
-      ports:
-        - 8190:8080
+        image: jwetzell/guacamole
+        container_name: guacamole
+        restart: unless-stopped
+        volumes:
+            - ../../assets/server_management/guacamole/postgres:/config
+        ports:
+            - 8190:8080
 volumes:
-  postgres:
-    driver: local
+    postgres:
+        driver: local
 
 networks:
-  default:
+    default:
