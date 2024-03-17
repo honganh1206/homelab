@@ -93,12 +93,10 @@ services:
       volumes:
         - ../../aseets/server_management/guacamole/postgres:/config
       ports:
-        - 8083:8083
+        - 8190:8080
 volumes:
   postgres:
     driver: local
 
 networks:
   default:
-    name: server_management
-    external: true
