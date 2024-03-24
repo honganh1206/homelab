@@ -44,3 +44,22 @@ services:
         depends_on:
             - tailscale
         network_mode: service:tailscale
+    caddy:
+        image: caddy:<version>
+        restart: unless-stopped
+        cap_add:
+            - NET_ADMIN
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        volumes:
+            - ../../assets/networking/caddy/Caddyfile:/etc/caddy/Caddyfile
+            - ../../assets/networking/caddy/site:/srv
+            - caddy_data:/data
+            - caddy_config:/config
+
+volumes:
+    caddy_data:
+        external: true
+    caddy_config:
