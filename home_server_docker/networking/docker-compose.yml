@@ -10,40 +10,18 @@ services:
             - "53:53/tcp"
             - "53:53/udp"
             - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-            - '8053:80/tcp'
+            - "8053:80/tcp"
+        environment:
+            TZ: "Etc/UTC"
+            # WEBPASSWORD: 'set a secure password here or it will be random'
         # Volumes store your data between container upgrades
         volumes:
-            - "../../assets/networking/pihole/etc-pihole:/etc/pihole"
-            - "../../assets/networking/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
-        # run `touch ./var-log/pihole.log` first unless you like errors
-      # - './var-log/pihole.log:/var/log/pihole/pihole.log'
-    # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+            - "./etc-pihole:/etc/pihole"
+            - "./etc-dnsmasq.d:/etc/dnsmasq.d"
+        #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
         cap_add:
             - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-        environment:
-          FTLCONF_LOCAL_IPV4: 192.168.41.55
-          PROXY_LOCATION: pihole
-          VIRTUAL_HOST: pihole.yourDomain.lan
-          VIRTUAL_PORT: 80
-        extra_hosts:
-          # Resolve to nothing domains (terminate connection)
-          - 'nw2master.bioware.com nwn2.master.gamespy.com:0.0.0.0'
-          # LAN hostnames for other docker containers using nginx-proxy
-          - 'yourDomain.lan:192.168.41.55'
-          - 'pihole pihole.yourDomain.lan:192.168.41.55'
-          - 'ghost ghost.yourDomain.lan:192.168.41.55'
-          - 'wordpress wordpress.yourDomain.lan:192.168.41.55'
-        restart: always
-    nginx-proxy:
-        image: nginxproxy/nginx-proxy
-        ports:
-            - "80:80"
-        environment:
-            DEFAULT_HOST: pihole.yourDomain.lan
-        volumes:
-            - "/var/run/docker.sock:/tmp/docker.sock"
-        restart: always
+        restart: unless-stopped
     tailscale:
         image: tailscale/tailscale:latest
         container_name: tailscale
@@ -61,22 +39,24 @@ services:
         # command: tailscaled
         privileged: true
         restart: unless-stopped
+#     nginx:
+#         image: nginx
+#         depends_on:
+#             - tailscale
+#         network_mode: service:tailscale
 #     caddy:
 #         image: caddy:latest
 #         restart: unless-stopped
-#         cap_add:
-#             - NET_ADMIN
 #         ports:
 #             - "80:80"
 #             - "443:443"
 #             - "443:443/udp"
 #         volumes:
-#             - $PWD/Caddyfile:/etc/caddy/Caddyfile
-#             - $PWD/site:/srv
+#             - ../../assets/networking/caddy/Caddyfile:/etc/caddy/Caddyfile
+#             - ../../assets/networking/caddy/site:/srv
 #             - caddy_data:/data
 #             - caddy_config:/config
 
 # volumes:
 #     caddy_data:
-#         external: true
 #     caddy_config:
