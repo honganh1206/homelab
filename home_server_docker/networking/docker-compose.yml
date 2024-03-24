@@ -47,8 +47,6 @@ services:
     caddy:
         image: caddy:latest
         restart: unless-stopped
-        cap_add:
-            - NET_ADMIN
         ports:
             - "80:80"
             - "443:443"
@@ -61,5 +59,4 @@ services:
 
 volumes:
     caddy_data:
-        external: true
     caddy_config:
