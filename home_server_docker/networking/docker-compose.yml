@@ -37,8 +37,8 @@ services:
             dns_net:
                 ipv4_address: 172.23.0.7
         ports:
-            - "192.168.1.1:53:53/tcp"
-            - "192.168.1.1:53:53/udp"
+            - "53:53/tcp"
+            - "53:53/udp"
             # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
             - "85:80/tcp"
         environment:
