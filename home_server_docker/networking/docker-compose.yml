@@ -6,7 +6,8 @@ networks:
         ipam:
             config:
                 - subnet: 172.23.0.0/16
-    proxy: external:true
+    proxy:
+        external: true
 
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
