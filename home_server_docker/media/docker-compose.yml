@@ -47,6 +47,7 @@ services:
     #     - /transcode_cache:/temp
     kometa:
         image: lscr.io/linuxserver/kometa:latest
+        command: python kometa.py --run
         container_name: kometa
         environment:
             - PUID=1000
