@@ -45,25 +45,22 @@ services:
     #     - /docker/tdarr/logs:/app/logs
     #     - /media:/media/hong/
     #     - /transcode_cache:/temp
-    plex-meta-manager:
-        image: meisnate12/plex-meta-manager # lscr.io/linuxserver/plex-meta-manager:latest
-        command: python plex-meta-manager.py -r # start python script to load metadata overlay
-        container_name: plex-meta-manager
-        # extra_hosts:
-        # - "host.docker.internal:host-gateway"
-        # user: ${PUID}:${PGID}
-        environment:
-            - TZ=TIMEZONE #optional
-        # - PUID=${PUID}
-        # - PGID=${PGID}
-        # - PMM_CONFIG=/config/config.yml #optional
-        # - PMM_TIME=03:00 #optional
-        # - PMM_RUN=False #optional
-        # - PMM_TEST=False #optional
-        # - PMM_NO_MISSING=False #optional
-        volumes:
-            - ../../assets/media/plex-meta-manager/config:/config
-        restart: unless-stopped
+    kometa:
+        kometa:
+            image: lscr.io/linuxserver/kometa:latest
+            container_name: kometa
+            environment:
+                - PUID=1000
+                - PGID=1000
+                - TZ=Etc/UTC
+                # - KOMETA_CONFIG=/config/config.yml #optional
+                # - KOMETA_TIME=03:00 #optional
+                # - KOMETA_RUN=False #optional
+                # - KOMETA_TEST=False #optional
+                # - KOMETA_NO_MISSING=False #optional
+            volumes:
+                - ../../assets/media/plex-meta-manager/config:/config
+            restart: unless-stopped
     jellyfin:
         image: lscr.io/linuxserver/jellyfin:latest
         container_name: root-jellyfin
