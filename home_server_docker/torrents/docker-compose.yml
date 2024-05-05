@@ -17,25 +17,6 @@ services:
             - 6881:6881
             - 6881:6881/udp
         restart: unless-stopped
-    flood:
-        image: jesec/flood:latest
-        container_name: flood
-        restart: always
-        depends_on:
-            - qbittorrent
-        user: 1000:1000
-        volumes:
-            - ../../aseets/torrents/flood/config:/config
-            - /downloads:/downloads
-            - /home/hong/Media/SeagateExpansion/Torrents:/media
-            - /etc/localtime:/etc/localtime:ro
-        ports:
-            - 3001:3001
-        command:
-            - --auth=none
-            - --qburl=http://192.168.1.105:8082
-            - --qbuser=${QBIT_USERNAME}
-            - --qbpass=${QBIT_PASSWORD}
     bazarr:
         image: lscr.io/linuxserver/bazarr:latest
         container_name: bazarr
