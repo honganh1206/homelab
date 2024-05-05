@@ -59,7 +59,7 @@ services:
             # - KOMETA_TEST=False #optional
             # - KOMETA_NO_MISSING=False #optional
         volumes:
-            - ../../assets/media/plex-meta-manager/config:/config
+            - ../../assets/media/kometa/config:/config
         restart: unless-stopped
     jellyfin:
         image: lscr.io/linuxserver/jellyfin:latest
