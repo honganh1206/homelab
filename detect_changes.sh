@@ -14,11 +14,11 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
   BUILD_VERSION=$(git rev-parse HEAD)
   echo "$(date --utc +%FT%TZ): Changes detected. Composing new version: $BUILD_VERSION"
-  ../scripts/restart_if_changed.sh
+  ./scripts/restart_if_changed.sh
 elif [ $REMOTE = $BASE ]; then
   echo "$(date --utc +%FT%TZ): Local changes detected. Stashing..."
   git stash
-  ../scripts/restart_if_changed.sh
+  ./scripts/restart_if_changed.sh
 else
   echo "$(date --utc +%FT%TZ): Git is diverged. This is unexpected..."
 fi
