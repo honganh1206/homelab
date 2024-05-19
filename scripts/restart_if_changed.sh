@@ -11,11 +11,11 @@ echo "$(date --utc +%FT%TZ): Re-starting docker compose..."
 # Start Docker Compose services in multiple directories
 
 # Directory paths
-NETWORKING="/home/hong/mini-pc-docker-compose-file/home_server_docker/networking"
-SERVER_MANAGEMENT="/home/hong/mini-pc-docker-compose-file/home_server_docker/server_management"
-TORRENTS="/home/hong/mini-pc-docker-compose-file/home_server_docker/torrents"
-MEDIA="/home/hong/mini-pc-docker-compose-file/home_server_docker/media"
-GENERAL="/home/hong/mini-pc-docker-compose-file/home_server_docker/general"
+NETWORKING="/home/hong/mini-pc-docker-compose-yml/home_server_docker/networking"
+SERVER_MANAGEMENT="/home/hong/mini-pc-docker-compose-yml/home_server_docker/server_management"
+TORRENTS="/home/hong/mini-pc-docker-compose-yml/home_server_docker/torrents"
+MEDIA="/home/hong/mini-pc-docker-compose-yml/home_server_docker/media"
+GENERAL="/home/hong/mini-pc-docker-compose-yml/home_server_docker/general"
 # Add more directories if needed
 
 # Function to check for changes and restart Docker Compose services
