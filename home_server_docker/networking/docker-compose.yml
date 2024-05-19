@@ -83,18 +83,18 @@ services:
     #     # command: tailscaled
     #     privileged: true
     #     restart: unless-stopped
-    # caddy:
-    #     image: caddy:latest
-    #     restart: unless-stopped
-    #     ports:
-    #         - "80:80"
-    #         - "443:443"
-    #         - "443:443/udp"
-    #     volumes:
-    #         - ../../assets/networking/caddy/Caddyfile:/etc/caddy/Caddyfile
-    #         - ../../assets/networking/caddy/site:/srv
-    #         - caddy_data:/data
-    #         - caddy_config:/config
+    caddy:
+        image: caddy:latest
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        volumes:
+            - ../../assets/networking/caddy/Caddyfile:/etc/caddy/Caddyfile
+            - ../../assets/networking/caddy/site:/srv
+            - caddy_data:/data
+            - caddy_config:/config
 
 volumes:
     caddy_data:
