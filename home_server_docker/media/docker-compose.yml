@@ -45,6 +45,18 @@ services:
     #     - /docker/tdarr/logs:/app/logs
     #     - /media:/media/hong/
     #     - /transcode_cache:/temp
+    overseerr:
+        image: lscr.io/linuxserver/overseerr:latest
+        container_name: overseerr
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+        volumes:
+            - /path/to/overseerr/config:/config
+        ports:
+            - 5055:5055
+        restart: unless-stopped
     kometa:
         image: lscr.io/linuxserver/kometa:latest
         container_name: kometa
