@@ -103,5 +103,5 @@ services:
             ND_SESSIONTIMEOUT: 24h
             ND_BASEURL: ""
         volumes:
-            - "../../assets/media/navidrome/data:/data"
-            - "/home/hong/Media/SeagateExpansion/Torrents/Music:/music:ro"
+            - ../../assets/media/navidrome/data:/data
+            - /home/hong/Media/SeagateExpansion/Torrents/Music:/music
