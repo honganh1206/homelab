@@ -1,0 +1,60 @@
+services:
+    # Dashboard for all apps
+    homarr:
+        container_name: homarr
+        image: ghcr.io/ajnart/homarr:latest
+        restart: unless-stopped
+        volumes:
+            - ./assets/server_management/homarr/configs:/app/data/configs
+            - ./assets/server_management/homarr/data:/data
+            - ./assets/server_management/homarr/icons:/app/public/icons
+        ports:
+            - "7575:7575"
+    # Rustdesk remote server
+    hbbs:
+        container_name: hbbs
+        # ports:
+        #   - 21115:21115
+        #   - 21116:21116
+        #   - 21116:21116/udp
+        #   - 21118:21118
+        image: rustdesk/rustdesk-server:latest
+        command: hbbs -r 127.0.0.1:21117
+        volumes:
+            - ./assets/server_management/rustdesk/data:/root
+        network_mode: "host"
+        depends_on:
+            - hbbr
+        restart: unless-stopped
+    hbbr:
+        container_name: hbbr
+        # ports:
+        #   - 21117:21117
+        #   - 21119:21119
+        image: rustdesk/rustdesk-server:latest
+        command: hbbr
+        volumes:
+            - ./assets/server_management/rustdesk/data:/root
+        network_mode: "host"
+        restart: unless-stopped
+    duplicati:
+        image: lscr.io/linuxserver/duplicati:latest
+        container_name: duplicati
+        environment:
+            - PUID=99 # nobody
+            - PGID=100 # users
+            - TZ=Etc/UTC
+            - CLI_ARGS= #optional
+        volumes:
+            - ./assets/server_management/duplicati/config:/config
+            - /home/hong/Media/WesternDigital/Backup:/backups
+            - /home/hong/Media/SeagateExpansion:/source
+        ports:
+            - 8200:8200
+        restart: unless-stopped
+volumes:
+    postgres:
+        driver: local
+
+networks:
+    default:

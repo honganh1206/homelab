@@ -1,3 +1,11 @@
 *.jpg
 meta.log*
 assets/
+
+data/
+jellyfin/
+homarr/
+plex-meta-manager/
+
+
+*.env
