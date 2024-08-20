@@ -68,7 +68,7 @@ services:
             # - KOMETA_TEST=False #optional
             # - KOMETA_NO_MISSING=False #optional
         volumes:
-            - .././assets/media/kometa/config:/config
+            - ./assets/media/kometa/config:/config
         restart: unless-stopped
     jellyfin:
         image: lscr.io/linuxserver/jellyfin:latest
@@ -79,7 +79,7 @@ services:
             - TZ=Etc/UTC
             # - JELLYFIN_PublishedServerUrl=192.168.1.105 #optional
         volumes:
-            - .././assets/media/jellyfin/config:/config/jellyfin
+            - ./assets/media/jellyfin/config:/config/jellyfin
             - /home/hong/Media/SeagateExpansion/Torrents/Shows:/data/tvshows
             - /home/hong/Media/SeagateExpansion/Torrents/Movies:/data/movies
         ports:
@@ -102,5 +102,5 @@ services:
             ND_SESSIONTIMEOUT: 24h
             ND_BASEURL: ""
         volumes:
-            - .././assets/media/navidrome/data:/data
+            - ./assets/media/navidrome/data:/data
             - /home/hong/Media/SeagateExpansion/Torrents/Music:/music:ro
