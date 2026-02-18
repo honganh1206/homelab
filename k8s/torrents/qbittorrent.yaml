@@ -19,9 +19,8 @@ spec:
           command: ['sh', '-c']
           args:
             - |
-              CONF="/config/qBittorrent.conf"
-              if [ ! -f "$CONF" ]; then
-                cat > "$CONF" << 'EOF'
+              mkdir -p /config/qBittorrent
+              cat > /config/qBittorrent/qBittorrent.conf << 'EOF'
               [LegalNotice]
               Accepted=true
 
@@ -30,8 +29,8 @@ spec:
               WebUI\Port=8080
               WebUI\ServerDomains=*
               WebUI\CSRFProtection=false
+              WebUI\HostHeaderValidation=false
               EOF
-              fi
           volumeMounts:
             - name: config
               mountPath: /config
