@@ -2,7 +2,7 @@ name: Lint K8s manifests
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   lint:
