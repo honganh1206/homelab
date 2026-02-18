@@ -30,6 +30,8 @@ spec:
               mountPath: /config
             - name: movies
               mountPath: /movies
+            - name: movies-wd
+              mountPath: /movies-wd
             - name: downloads
               mountPath: /downloads
       volumes:
@@ -39,6 +41,9 @@ spec:
         - name: movies
           hostPath:
             path: /home/hong/Media/SeagateExpansion/Torrents/Movies
+        - name: movies-wd
+          hostPath:
+            path: /home/hong/Media/WesternDigital/Torrents/Movies
         - name: downloads
           hostPath:
             path: /downloads

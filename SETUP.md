@@ -163,7 +163,7 @@ sudo ./svc.sh uninstall # remove the service
 
 Stop each service **one at a time** as you migrate (not all at once).
 
-For each service: stop it locally, then push the corresponding K8s manifest to `main` from your client machine. The self-hosted runner will auto-deploy it.
+For each service: stop it locally, then push the corresponding K8s manifest to `master` from your client machine. The self-hosted runner will auto-deploy it.
 
 ```bash
 # Example: stop qBittorrent before deploying the K8s version

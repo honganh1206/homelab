@@ -33,7 +33,7 @@ See [SETUP.md](SETUP.md) for the full setup guide including:
 
 ## CI/CD
 
-- **On push to `main`**: GitHub Actions self-hosted runner on the mini PC auto-applies K8s manifests
+- **On push to `master`**: GitHub Actions self-hosted runner on the mini PC auto-applies K8s manifests
 - **On PR / push**: YAML lint + `kubectl --dry-run` validation runs on GitHub-hosted runners
 
 ## Access (NodePort)
