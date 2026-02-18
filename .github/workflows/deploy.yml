@@ -2,10 +2,6 @@ name: Deploy to K3s
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
-    paths:
-      - 'k8s/**'
 
 jobs:
   deploy:
