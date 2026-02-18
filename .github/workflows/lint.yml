@@ -1,0 +1,31 @@
+name: Lint K8s Manifests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate YAML syntax
+        run: |
+          for f in $(find k8s/ -name '*.yaml'); do
+            echo "Validating $f..."
+            python3 -c "import yaml; yaml.safe_load(open('$f'))" || exit 1
+          done
+          echo "All manifests are valid YAML"
+
+      - name: Check manifests with kubectl dry-run
+        uses: azure/setup-kubectl@v4
+      - run: |
+          for f in $(find k8s/ -name '*.yaml'); do
+            echo "Dry-run: $f"
+            kubectl apply --dry-run=client -f "$f" 2>&1 || exit 1
+          done
+          echo "All manifests pass dry-run validation"

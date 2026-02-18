@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: torrents
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:latest
+          ports:
+            - containerPort: 7878
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Etc/UTC"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: movies
+              mountPath: /movies
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/hong/k8s-data/torrents/radarr/config
+        - name: movies
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Movies
+        - name: downloads
+          hostPath:
+            path: /downloads
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: torrents
+spec:
+  selector:
+    app: radarr
+  ports:
+    - port: 7878
+      targetPort: 7878
+      nodePort: 30878
+  type: NodePort

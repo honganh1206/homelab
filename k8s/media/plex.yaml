@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      hostNetwork: true
+      containers:
+        - name: plex
+          image: lscr.io/linuxserver/plex:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Etc/UTC"
+            - name: VERSION
+              value: "docker"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: tvshows
+              mountPath: /tv
+            - name: movies
+              mountPath: /movies
+            - name: music
+              mountPath: /music
+            - name: dri
+              mountPath: /dev/dri
+          securityContext:
+            privileged: true
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/hong/k8s-data/media/plex/config
+        - name: tvshows
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Shows
+        - name: movies
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Movies
+        - name: music
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Music
+        - name: dri
+          hostPath:
+            path: /dev/dri

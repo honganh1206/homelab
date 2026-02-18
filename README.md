@@ -6,31 +6,49 @@
 - Learning system administration
 - A hobby :)
 
-## Tech stacks
+## Tech Stack (K3s)
 
-### Server Management
+### Torrents (`torrents` namespace)
 
-- Portainer
-- Duplicati #DOCKERIZED
-- Rustdesk #DOCKERIZED
-- Samba #DOCKERIZED
-- Homarr #DOCKERIZED
+- Radarr — movie management
+- Sonarr — TV show management
+- Bazarr — subtitle management
+- qBittorrent — torrent client
 
-### Torrents
+### Media (`media` namespace)
 
-- Prowlarr #LOCAL_INSTALLATION
-- Radarr #LOCAL_INSTALLATION
-- Sonarr #LOCAL_INSTALLATION
-- Lidarr #LOCAL_INSTALLATION
-- Whisparr
-- Bazarr #LOCAL_INSTALLATION
-- Readarr #LOCAL_INSTALLATION
-- Qbittorrent #LOCAL_INSTALLATION
+- Plex — media server (hostNetwork for LAN discovery, /dev/dri for hardware transcoding)
 
-### Media
+### Server (`server` namespace)
 
-- Jellyfin #DOCKERIZED
-- Plex #LOCAL_INSTALLATION
-- Ombi #LOCAL_INSTALLATION
-- Plex Meta Manager #DOCKERIZED
-- Tdarr (Not currently in use)
+- Rustdesk (hbbs + hbbr) — remote desktop server
+
+## Setup
+
+See [SETUP.md](SETUP.md) for the full setup guide including:
+- K3s installation
+- Migrating existing configs
+- Deploying services
+- Setting up automated deployment via GitHub Actions
+
+## CI/CD
+
+- **On push to `main`**: GitHub Actions self-hosted runner on the mini PC auto-applies K8s manifests
+- **On PR / push**: YAML lint + `kubectl --dry-run` validation runs on GitHub-hosted runners
+
+## Access (NodePort)
+
+| Service      | URL                        |
+|--------------|----------------------------|
+| qBittorrent  | `http://<mini-pc-ip>:30082` |
+| Radarr       | `http://<mini-pc-ip>:30878` |
+| Sonarr       | `http://<mini-pc-ip>:30989` |
+| Bazarr       | `http://<mini-pc-ip>:30767` |
+| Plex         | `http://<mini-pc-ip>:32400` |
+| Rustdesk     | hostNetwork (ports 21115-21119) |
+
+## Data Paths
+
+All config data lives under `/home/hong/k8s-data/<namespace>/<service>/config`.
+
+Media libraries mount directly from `/home/hong/Media/SeagateExpansion/Torrents/`.

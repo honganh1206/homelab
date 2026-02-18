@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+  namespace: torrents
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+    spec:
+      containers:
+        - name: bazarr
+          image: lscr.io/linuxserver/bazarr:latest
+          ports:
+            - containerPort: 6767
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Etc/UTC"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: movies
+              mountPath: /movies
+            - name: tvshows
+              mountPath: /tv
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/hong/k8s-data/torrents/bazarr/config
+        - name: movies
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Movies
+        - name: tvshows
+          hostPath:
+            path: /home/hong/Media/SeagateExpansion/Torrents/Shows
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  namespace: torrents
+spec:
+  selector:
+    app: bazarr
+  ports:
+    - port: 6767
+      targetPort: 6767
+      nodePort: 30767
+  type: NodePort

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rustdesk-hbbr
+  namespace: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustdesk-hbbr
+  template:
+    metadata:
+      labels:
+        app: rustdesk-hbbr
+    spec:
+      hostNetwork: true
+      containers:
+        - name: hbbr
+          image: rustdesk/rustdesk-server:latest
+          command: ["hbbr"]
+          volumeMounts:
+            - name: data
+              mountPath: /root
+      volumes:
+        - name: data
+          hostPath:
+            path: /home/hong/k8s-data/server/rustdesk/data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rustdesk-hbbs
+  namespace: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustdesk-hbbs
+  template:
+    metadata:
+      labels:
+        app: rustdesk-hbbs
+    spec:
+      hostNetwork: true
+      containers:
+        - name: hbbs
+          image: rustdesk/rustdesk-server:latest
+          command: ["hbbs", "-r", "127.0.0.1:21117"]
+          volumeMounts:
+            - name: data
+              mountPath: /root
+      volumes:
+        - name: data
+          hostPath:
+            path: /home/hong/k8s-data/server/rustdesk/data
