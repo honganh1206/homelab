@@ -28,6 +28,8 @@ spec:
               [Preferences]
               WebUI\Address=*
               WebUI\Port=8080
+              WebUI\ServerDomains=*
+              WebUI\CSRFProtection=false
               EOF
               fi
           volumeMounts:
