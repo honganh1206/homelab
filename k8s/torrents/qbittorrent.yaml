@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:latest
+          image: lscr.io/linuxserver/qbittorrent:4.6.7
           ports:
             - containerPort: 8080
             - containerPort: 6881
@@ -38,10 +38,6 @@ spec:
               mountPath: /downloads
             - name: media
               mountPath: /media
-            - name: init-scripts
-              mountPath: /custom-cont-init.d
-            - name: qbit-config
-              mountPath: /qbit-custom-config
       volumes:
         - name: config
           hostPath:
@@ -52,13 +48,6 @@ spec:
         - name: media
           hostPath:
             path: /media
-        - name: init-scripts
-          configMap:
-            name: qbittorrent-init
-            defaultMode: 0755
-        - name: qbit-config
-          configMap:
-            name: qbittorrent-config
 ---
 apiVersion: v1
 kind: Service
