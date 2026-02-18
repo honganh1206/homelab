@@ -14,7 +14,11 @@
 # SSH into the mini PC
 ssh minipc
 
-# Install K3s
+# Make kubeconfig readable so the GitHub Actions runner can use kubectl
+sudo mkdir -p /etc/rancher/k3s
+echo 'write-kubeconfig-mode: "0644"' | sudo tee /etc/rancher/k3s/config.yaml
+
+# Install K3s (picks up config.yaml automatically)
 curl -sfL https://get.k3s.io | sh -
 
 # Verify installation
