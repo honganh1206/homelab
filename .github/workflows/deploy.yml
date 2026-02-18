@@ -17,6 +17,12 @@ jobs:
       - name: Deploy server services
         run: kubectl apply -f k8s/server/
 
+      - name: Create qBittorrent ConfigMap
+        run: |
+          kubectl create configmap qbittorrent-config \
+            --from-file=qBittorrent.conf=k8s/torrents/qbit-config.conf \
+            -n torrents --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy torrent services
         run: kubectl apply -f k8s/torrents/
 
