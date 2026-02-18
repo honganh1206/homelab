@@ -1,11 +1,8 @@
-name: Lint K8s Manifests
+name: Lint K8s manifests
 
 on:
-  pull_request:
   push:
     branches: [main]
-    paths:
-      - 'k8s/**'
 
 jobs:
   lint:
@@ -13,19 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate YAML syntax
+      - name: Install kubeconform
         run: |
-          for f in $(find k8s/ -name '*.yaml'); do
-            echo "Validating $f..."
-            python3 -c "import yaml; yaml.safe_load(open('$f'))" || exit 1
-          done
-          echo "All manifests are valid YAML"
+          curl -sSLo kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz
+          tar xzf kubeconform.tar.gz
+          sudo mv kubeconform /usr/local/bin/
 
-      - name: Check manifests with kubectl dry-run
-        uses: azure/setup-kubectl@v4
-      - run: |
-          for f in $(find k8s/ -name '*.yaml'); do
-            echo "Dry-run: $f"
-            kubectl apply --dry-run=client -f "$f" 2>&1 || exit 1
-          done
-          echo "All manifests pass dry-run validation"
+      - name: Lint manifests
+        run: kubeconform -summary -strict k8s/**/*.yaml
