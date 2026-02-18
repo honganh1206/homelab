@@ -13,27 +13,6 @@ spec:
       labels:
         app: qbittorrent
     spec:
-      initContainers:
-        - name: init-config
-          image: busybox:1.36
-          command: ['sh', '-c']
-          args:
-            - |
-              mkdir -p /config/qBittorrent
-              cat > /config/qBittorrent/qBittorrent.conf << 'EOF'
-              [LegalNotice]
-              Accepted=true
-
-              [Preferences]
-              WebUI\Address=*
-              WebUI\Port=8080
-              WebUI\ServerDomains=*
-              WebUI\CSRFProtection=false
-              WebUI\HostHeaderValidation=false
-              EOF
-          volumeMounts:
-            - name: config
-              mountPath: /config
       containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:4.6.7
