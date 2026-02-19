@@ -127,7 +127,5 @@ pihole:
 # -- Samba (infra namespace)
 samba:
   enabled: true
-  image: dockurr/samba:latest
+  image: dperson/samba:latest
   port: 445
-  uid: "1000"
-  gid: "1000"
