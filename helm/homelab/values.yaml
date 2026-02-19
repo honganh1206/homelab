@@ -104,6 +104,14 @@ homepage:
         - name: Stirling PDF
           icon: stirling-pdf.png
           port: 30880
+    - group: Infra
+      items:
+        - name: Prometheus
+          icon: prometheus.png
+          port: 30090
+        - name: Grafana
+          icon: grafana.png
+          port: 30030
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -118,6 +126,27 @@ stirlingpdf:
   image: stirlingtools/stirling-pdf:latest
   port: 8080
   nodePort: 30880
+
+# -- Node Exporter (infra namespace)
+nodeExporter:
+  enabled: true
+  image: prom/node-exporter:latest
+  port: 9100
+
+# -- Prometheus (infra namespace)
+prometheus:
+  enabled: true
+  image: prom/prometheus:latest
+  port: 9090
+  nodePort: 30090
+  retention: 30d
+
+# -- Grafana (infra namespace)
+grafana:
+  enabled: true
+  image: grafana/grafana:latest
+  port: 3000
+  nodePort: 30030
 
 # -- Samba (infra namespace)
 samba:

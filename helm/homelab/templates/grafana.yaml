@@ -1,0 +1,43 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: {{ .Values.grafana.image }}
+          ports:
+            - containerPort: {{ .Values.grafana.port }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: data
+          hostPath:
+            path: {{ .Values.paths.config }}/infra/grafana/data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: infra
+spec:
+  selector:
+    app: grafana
+  ports:
+    - port: {{ .Values.grafana.port }}
+      targetPort: {{ .Values.grafana.port }}
+      nodePort: {{ .Values.grafana.nodePort }}
+  type: NodePort
+{{- end }}

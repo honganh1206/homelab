@@ -46,6 +46,8 @@ mkdir -p /home/hong/k8s-data/media/plex/config
 mkdir -p /home/hong/k8s-data/server/rustdesk/data
 mkdir -p /home/hong/k8s-data/tools/homepage/config
 mkdir -p /home/hong/k8s-data/tools/stirling-pdf/configs
+mkdir -p /home/hong/k8s-data/infra/prometheus/data
+mkdir -p /home/hong/k8s-data/infra/grafana/data
 ```
 
 ## Step 3: Migrate existing configs
@@ -191,6 +193,8 @@ sudo systemctl disable --now plexmediaserver
 | Homepage    | `http://<mini-pc-ip>:30300`        | Dashboard loads, can add service widgets     |
 | IT-Tools    | `http://<mini-pc-ip>:30080`        | Tools page loads                             |
 | Stirling PDF| `http://<mini-pc-ip>:30880`        | PDF tools page loads                         |
+| Prometheus  | `http://<mini-pc-ip>:30090`        | Targets page shows node-exporter UP          |
+| Grafana     | `http://<mini-pc-ip>:30030`        | Login with admin/admin, change password      |
 | Samba       | `\\<mini-pc-ip>\Media` via explorer | Shared folders visible                       |
 
 ### Post-deploy: Update Radarr/Sonarr download client
