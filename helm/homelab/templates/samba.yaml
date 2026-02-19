@@ -1,4 +1,25 @@
 {{- if .Values.samba.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samba-config
+  namespace: infra
+data:
+  smb.conf: |
+    [global]
+    workgroup = WORKGROUP
+    server string = Homelab Samba
+    security = user
+    map to guest = Bad User
+    guest account = nobody
+
+    [Media]
+    path = /storage
+    browsable = yes
+    read only = no
+    guest ok = yes
+    force user = root
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,17 +42,14 @@ spec:
           ports:
             - containerPort: {{ .Values.samba.port }}
           env:
-            - name: NAME
-              value: {{ .Values.samba.shareName | quote }}
-            - name: USER
-              value: {{ .Values.samba.user | quote }}
-            - name: PASS
-              value: {{ .Values.samba.password | quote }}
             - name: UID
               value: {{ .Values.samba.uid | quote }}
             - name: GID
               value: {{ .Values.samba.gid | quote }}
           volumeMounts:
+            - name: samba-conf
+              mountPath: /etc/samba/smb.conf
+              subPath: smb.conf
             - name: media-seagate
               mountPath: /storage/SeagateExpansion
             - name: media-wd
@@ -39,6 +57,9 @@ spec:
             - name: config
               mountPath: /storage/Config
       volumes:
+        - name: samba-conf
+          configMap:
+            name: samba-config
         - name: media-seagate
           hostPath:
             path: {{ .Values.paths.seagate }}

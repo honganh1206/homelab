@@ -129,8 +129,5 @@ samba:
   enabled: true
   image: dockurr/samba:latest
   port: 445
-  shareName: "Media"
-  user: "hong"
-  password: "changeme"
   uid: "1000"
   gid: "1000"
