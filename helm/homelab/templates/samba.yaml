@@ -14,6 +14,7 @@ spec:
       labels:
         app: samba
     spec:
+      hostNetwork: true
       containers:
         - name: samba
           image: {{ .Values.samba.image }}
@@ -47,18 +48,4 @@ spec:
         - name: config
           hostPath:
             path: {{ .Values.paths.config }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: samba
-  namespace: infra
-spec:
-  selector:
-    app: samba
-  ports:
-    - port: {{ .Values.samba.port }}
-      targetPort: {{ .Values.samba.port }}
-      nodePort: {{ .Values.samba.nodePort }}
-  type: NodePort
 {{- end }}

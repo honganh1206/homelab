@@ -129,7 +129,6 @@ samba:
   enabled: true
   image: dockurr/samba:latest
   port: 445
-  nodePort: 30445
   shareName: "Media"
   user: "hong"
   password: "changeme"
