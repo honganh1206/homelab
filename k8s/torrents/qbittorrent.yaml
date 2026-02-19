@@ -17,7 +17,7 @@ spec:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:4.6.7
           ports:
-            - containerPort: 8082
+            - containerPort: 8080
             - containerPort: 6881
               protocol: TCP
             - containerPort: 6881
@@ -30,7 +30,7 @@ spec:
             - name: TZ
               value: "Etc/UTC"
             - name: WEBUI_PORT
-              value: "8082"
+              value: "8080"
           volumeMounts:
             - name: config
               mountPath: /config
@@ -59,8 +59,8 @@ spec:
     app: qbittorrent
   ports:
     - name: webui
-      port: 8082
-      targetPort: 8082
+      port: 8080
+      targetPort: 8080
       nodePort: 30082
     - name: torrent-tcp
       port: 6881
