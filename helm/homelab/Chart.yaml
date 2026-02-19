@@ -1,0 +1,5 @@
+apiVersion: v2
+name: homelab
+description: Homelab K3s infrastructure chart
+version: 0.1.0
+type: application

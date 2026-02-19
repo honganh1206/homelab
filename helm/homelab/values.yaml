@@ -1,0 +1,67 @@
+# -- Global host path prefixes (centralized to avoid duplication)
+paths:
+  config: /home/hong/k8s-data
+  seagate: /home/hong/Media/SeagateExpansion/Torrents
+  westernDigital: /home/hong/Media/WesternDigital/Torrents
+
+# -- Common environment variables for linuxserver images
+linuxserver:
+  puid: "1000"
+  pgid: "1000"
+  tz: "Etc/UTC"
+
+# -- Namespace definitions
+namespaces:
+  - torrents
+  - media
+  - server
+
+# -- qBittorrent (torrents namespace)
+qbittorrent:
+  enabled: true
+  image: lscr.io/linuxserver/qbittorrent:4.6.7
+  webuiPort: 8080
+  nodePort: 30082
+  torrentPort: 6881
+  torrentNodePort: 30881
+  volumes:
+    downloads: /downloads
+    media: /media
+
+# -- Radarr (torrents namespace)
+radarr:
+  enabled: true
+  image: lscr.io/linuxserver/radarr:latest
+  port: 7878
+  nodePort: 30878
+  volumes:
+    downloads: /downloads
+
+# -- Sonarr (torrents namespace)
+sonarr:
+  enabled: true
+  image: lscr.io/linuxserver/sonarr:latest
+  port: 8989
+  nodePort: 30989
+  volumes:
+    downloads: /downloads
+
+# -- Bazarr (torrents namespace)
+bazarr:
+  enabled: true
+  image: lscr.io/linuxserver/bazarr:latest
+  port: 6767
+  nodePort: 30767
+
+# -- Plex (media namespace)
+plex:
+  enabled: true
+  image: lscr.io/linuxserver/plex:latest
+  hostNetwork: true
+  privileged: true
+
+# -- Rustdesk (server namespace)
+rustdesk:
+  enabled: true
+  image: rustdesk/rustdesk-server:latest
+  hostNetwork: true

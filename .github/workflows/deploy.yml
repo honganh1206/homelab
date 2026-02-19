@@ -11,17 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Apply namespaces
-        run: kubectl apply -f k8s/namespaces.yaml
-
-      - name: Deploy server services
-        run: kubectl apply -f k8s/server/
-
-      - name: Deploy torrent services
-        run: kubectl apply -f k8s/torrents/
-
-      - name: Deploy media services
-        run: kubectl apply -f k8s/media/
+      - name: Deploy with Helm
+        run: helm upgrade --install homelab helm/homelab --create-namespace
 
       - name: Verify pods
         run: |

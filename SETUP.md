@@ -143,7 +143,7 @@ Your runner should appear with a green **Online** status.
 
 ```
 You push code → GitHub Actions triggers → Self-hosted runner on mini PC picks it up
-→ Runs `actions/checkout` (auto-clones repo) → Runs kubectl apply → Services updated
+→ Runs `actions/checkout` (auto-clones repo) → Runs helm upgrade --install → Services updated
 ```
 
 No manual repo clone. No SSH to pull. No cron jobs. Changes deploy within seconds of pushing.
@@ -196,7 +196,7 @@ After migrating qBittorrent to K3s, update the download client URL in Radarr and
 
 ---
 
-## Useful kubectl commands
+## Useful commands
 
 ```bash
 # See all pods across namespaces
@@ -211,7 +211,15 @@ kubectl rollout restart -n torrents deployment/radarr
 # See events (useful for debugging)
 kubectl get events -n torrents --sort-by='.lastTimestamp'
 
-# Delete and redeploy a service
-kubectl delete -f k8s/torrents/radarr.yaml
-kubectl apply -f k8s/torrents/radarr.yaml
+# Deploy / update all services
+helm upgrade --install homelab helm/homelab --create-namespace
+
+# Preview what Helm will render
+helm template homelab helm/homelab
+
+# Disable a service (set enabled: false in values.yaml, then redeploy)
+helm upgrade --install homelab helm/homelab
+
+# Uninstall everything
+helm uninstall homelab
 ```
