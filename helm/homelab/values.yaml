@@ -101,8 +101,6 @@ homepage:
         - name: IT-Tools
           icon: it-tools.png
           port: 30080
-    - group: Tools
-      items:
         - name: Stirling PDF
           icon: stirling-pdf.png
           port: 30880
