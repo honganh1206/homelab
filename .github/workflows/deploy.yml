@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Ensure namespaces exist
+        run: |
+          for ns in torrents media server; do
+            kubectl create namespace $ns --dry-run=client -o yaml | kubectl apply -f -
+          done
+
       - name: Deploy with Helm
         run: helm upgrade --install homelab helm/homelab --create-namespace
 

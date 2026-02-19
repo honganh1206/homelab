@@ -1,7 +1,4 @@
-{{- range .Values.namespaces }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ . }}
----
-{{- end }}
+{{- /*
+Namespaces are created via --create-namespace or kubectl before first deploy.
+They are not managed by this chart to avoid adoption conflicts.
+*/ -}}
