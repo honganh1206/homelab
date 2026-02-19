@@ -29,8 +29,6 @@ spec:
           env:
             - name: TZ
               value: {{ .Values.pihole.tz | quote }}
-            - name: WEBPASSWORD
-              value: {{ .Values.pihole.webPassword | quote }}
           volumeMounts:
             - name: pihole-config
               mountPath: /etc/pihole
