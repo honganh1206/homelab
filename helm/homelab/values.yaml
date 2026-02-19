@@ -16,6 +16,7 @@ namespaces:
   - media
   - server
   - tools
+  - infra
 
 # -- qBittorrent (torrents namespace)
 qbittorrent:
@@ -73,6 +74,42 @@ homepage:
   image: ghcr.io/gethomepage/homepage:latest
   port: 3000
   nodePort: 30300
+  ip: 192.168.1.105
+  services:
+    - group: Torrents
+      items:
+        - name: qBittorrent
+          icon: qbittorrent.png
+          port: 30082
+        - name: Radarr
+          icon: radarr.png
+          port: 30878
+        - name: Sonarr
+          icon: sonarr.png
+          port: 30989
+        - name: Bazarr
+          icon: bazarr.png
+          port: 30767
+    - group: Media
+      items:
+        - name: Plex
+          icon: plex.png
+          port: 32400
+          path: /web
+    - group: Tools
+      items:
+        - name: IT-Tools
+          icon: it-tools.png
+          port: 30080
+    - group: Infra
+      items:
+        - name: Pi-hole
+          icon: pi-hole.png
+          port: 30053
+          path: /admin
+        - name: Samba
+          icon: samba.png
+          port: 30445
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -80,3 +117,25 @@ ittools:
   image: corentinth/it-tools:latest
   port: 80
   nodePort: 30080
+
+# -- Pi-hole (infra namespace)
+pihole:
+  enabled: true
+  image: pihole/pihole:latest
+  webPort: 80
+  webNodePort: 30053
+  dnsPort: 53
+  tz: "Etc/UTC"
+  webPassword: "changeme"
+
+# -- Samba (infra namespace)
+samba:
+  enabled: true
+  image: dockurr/samba:latest
+  port: 445
+  nodePort: 30445
+  shareName: "Media"
+  user: "hong"
+  password: "changeme"
+  uid: "1000"
+  gid: "1000"

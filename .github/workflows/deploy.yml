@@ -13,7 +13,7 @@ jobs:
 
       - name: Ensure namespaces exist
         run: |
-          for ns in torrents media server tools; do
+          for ns in torrents media server tools infra; do
             kubectl create namespace $ns --dry-run=client -o yaml | kubectl apply -f -
           done
 

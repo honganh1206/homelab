@@ -1,0 +1,64 @@
+{{- if .Values.samba.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samba
+  template:
+    metadata:
+      labels:
+        app: samba
+    spec:
+      containers:
+        - name: samba
+          image: {{ .Values.samba.image }}
+          ports:
+            - containerPort: {{ .Values.samba.port }}
+          env:
+            - name: NAME
+              value: {{ .Values.samba.shareName | quote }}
+            - name: USER
+              value: {{ .Values.samba.user | quote }}
+            - name: PASS
+              value: {{ .Values.samba.password | quote }}
+            - name: UID
+              value: {{ .Values.samba.uid | quote }}
+            - name: GID
+              value: {{ .Values.samba.gid | quote }}
+          volumeMounts:
+            - name: media-seagate
+              mountPath: /storage/SeagateExpansion
+            - name: media-wd
+              mountPath: /storage/WesternDigital
+            - name: config
+              mountPath: /storage/Config
+      volumes:
+        - name: media-seagate
+          hostPath:
+            path: {{ .Values.paths.seagate }}
+        - name: media-wd
+          hostPath:
+            path: {{ .Values.paths.westernDigital }}
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: samba
+  namespace: infra
+spec:
+  selector:
+    app: samba
+  ports:
+    - port: {{ .Values.samba.port }}
+      targetPort: {{ .Values.samba.port }}
+      nodePort: {{ .Values.samba.nodePort }}
+  type: NodePort
+{{- end }}

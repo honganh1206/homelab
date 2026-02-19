@@ -1,0 +1,79 @@
+{{- if .Values.pihole.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      containers:
+        - name: pihole
+          image: {{ .Values.pihole.image }}
+          ports:
+            - containerPort: {{ .Values.pihole.webPort }}
+              name: web
+            - containerPort: {{ .Values.pihole.dnsPort }}
+              protocol: TCP
+              name: dns-tcp
+            - containerPort: {{ .Values.pihole.dnsPort }}
+              protocol: UDP
+              name: dns-udp
+          env:
+            - name: TZ
+              value: {{ .Values.pihole.tz | quote }}
+            - name: WEBPASSWORD
+              value: {{ .Values.pihole.webPassword | quote }}
+          volumeMounts:
+            - name: pihole-config
+              mountPath: /etc/pihole
+            - name: dnsmasq-config
+              mountPath: /etc/dnsmasq.d
+      volumes:
+        - name: pihole-config
+          hostPath:
+            path: {{ .Values.paths.config }}/infra/pihole/etc-pihole
+        - name: dnsmasq-config
+          hostPath:
+            path: {{ .Values.paths.config }}/infra/pihole/etc-dnsmasq.d
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-web
+  namespace: infra
+spec:
+  selector:
+    app: pihole
+  ports:
+    - port: {{ .Values.pihole.webPort }}
+      targetPort: {{ .Values.pihole.webPort }}
+      nodePort: {{ .Values.pihole.webNodePort }}
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns
+  namespace: infra
+spec:
+  selector:
+    app: pihole
+  ports:
+    - port: {{ .Values.pihole.dnsPort }}
+      targetPort: {{ .Values.pihole.dnsPort }}
+      protocol: TCP
+      name: dns-tcp
+    - port: {{ .Values.pihole.dnsPort }}
+      targetPort: {{ .Values.pihole.dnsPort }}
+      protocol: UDP
+      name: dns-udp
+  type: NodePort
+{{- end }}

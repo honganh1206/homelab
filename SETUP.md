@@ -44,6 +44,9 @@ mkdir -p /home/hong/k8s-data/torrents/sonarr/config
 mkdir -p /home/hong/k8s-data/torrents/bazarr/config
 mkdir -p /home/hong/k8s-data/media/plex/config
 mkdir -p /home/hong/k8s-data/server/rustdesk/data
+mkdir -p /home/hong/k8s-data/tools/homepage/config
+mkdir -p /home/hong/k8s-data/infra/pihole/etc-pihole
+mkdir -p /home/hong/k8s-data/infra/pihole/etc-dnsmasq.d
 ```
 
 ## Step 3: Migrate existing configs
@@ -186,6 +189,10 @@ sudo systemctl disable --now plexmediaserver
 | Bazarr      | `http://<mini-pc-ip>:30767`        | Subtitle settings preserved                  |
 | Plex        | `http://<mini-pc-ip>:32400/web`    | Libraries visible, playback works            |
 | Rustdesk    | Connect via Rustdesk client        | Remote access still works                    |
+| Homepage    | `http://<mini-pc-ip>:30300`        | Dashboard loads, can add service widgets     |
+| IT-Tools    | `http://<mini-pc-ip>:30080`        | Tools page loads                             |
+| Pi-hole     | `http://<mini-pc-ip>:30053/admin`  | Admin dashboard loads, DNS resolves          |
+| Samba       | `\\<mini-pc-ip>\Media` via explorer | Shared folders visible                       |
 
 ### Post-deploy: Update Radarr/Sonarr download client
 

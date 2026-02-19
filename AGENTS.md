@@ -26,4 +26,5 @@ Homelab K3s infrastructure repo. Kubernetes manifests are managed via a Helm cha
 - Expose services via `NodePort` (30000+ range). Keep one template per service.
 - All host paths are centralized in `values.yaml` under `paths.*` — never hardcode paths in templates.
 - Each service has an `enabled` flag in values.yaml for easy toggling.
+- When adding a new service, also register it in `values.yaml` under `homepage.services` so it appears on the Homepage dashboard.
 - Secrets/env files are gitignored (`*.env`). Never commit credentials.

@@ -1,4 +1,21 @@
 {{- if .Values.homepage.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config
+  namespace: tools
+data:
+  services.yaml: |
+    {{- range .Values.homepage.services }}
+    - {{ .group }}:
+        {{- range .items }}
+        - {{ .name }}:
+            icon: {{ .icon }}
+            href: http://{{ $.Values.homepage.ip }}:{{ .port }}{{ .path | default "" }}
+            siteMonitor: http://{{ $.Values.homepage.ip }}:{{ .port }}{{ .path | default "" }}
+        {{- end }}
+    {{- end }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,11 +41,12 @@ spec:
               value: "*"
           volumeMounts:
             - name: config
-              mountPath: /app/config
+              mountPath: /app/config/services.yaml
+              subPath: services.yaml
       volumes:
         - name: config
-          hostPath:
-            path: {{ .Values.paths.config }}/tools/homepage/config
+          configMap:
+            name: homepage-config
 ---
 apiVersion: v1
 kind: Service
