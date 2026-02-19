@@ -104,8 +104,6 @@ homepage:
         - name: Stirling PDF
           icon: stirling-pdf.png
           port: 30880
-    - group: Infra
-      items:
         - name: Prometheus
           icon: prometheus.png
           port: 30090
