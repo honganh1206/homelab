@@ -14,6 +14,7 @@ spec:
       labels:
         app: pihole
     spec:
+      hostNetwork: true
       containers:
         - name: pihole
           image: {{ .Values.pihole.image }}
@@ -41,37 +42,4 @@ spec:
         - name: dnsmasq-config
           hostPath:
             path: {{ .Values.paths.config }}/infra/pihole/etc-dnsmasq.d
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pihole-web
-  namespace: infra
-spec:
-  selector:
-    app: pihole
-  ports:
-    - port: {{ .Values.pihole.webPort }}
-      targetPort: {{ .Values.pihole.webPort }}
-      nodePort: {{ .Values.pihole.webNodePort }}
-  type: NodePort
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pihole-dns
-  namespace: infra
-spec:
-  selector:
-    app: pihole
-  ports:
-    - port: {{ .Values.pihole.dnsPort }}
-      targetPort: {{ .Values.pihole.dnsPort }}
-      protocol: TCP
-      name: dns-tcp
-    - port: {{ .Values.pihole.dnsPort }}
-      targetPort: {{ .Values.pihole.dnsPort }}
-      protocol: UDP
-      name: dns-udp
-  type: NodePort
 {{- end }}
