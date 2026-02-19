@@ -107,9 +107,6 @@ homepage:
           icon: pi-hole.png
           port: 30053
           path: /admin
-        - name: Samba
-          icon: samba.png
-          port: 30445
 
 # -- IT-Tools (tools namespace)
 ittools:
