@@ -101,12 +101,11 @@ homepage:
         - name: IT-Tools
           icon: it-tools.png
           port: 30080
-    - group: Infra
+    - group: Tools
       items:
-        - name: Pi-hole
-          icon: pi-hole.png
-          port: 80
-          path: /admin
+        - name: Stirling PDF
+          icon: stirling-pdf.png
+          port: 30880
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -115,13 +114,12 @@ ittools:
   port: 80
   nodePort: 30080
 
-# -- Pi-hole (infra namespace)
-pihole:
+# -- Stirling PDF (tools namespace)
+stirlingpdf:
   enabled: true
-  image: pihole/pihole:latest
-  webPort: 80
-  dnsPort: 53
-  tz: "Etc/UTC"
+  image: stirlingtools/stirling-pdf:latest
+  port: 8080
+  nodePort: 30880
 
 # -- Samba (infra namespace)
 samba:
