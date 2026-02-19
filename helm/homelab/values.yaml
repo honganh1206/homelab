@@ -15,6 +15,7 @@ namespaces:
   - torrents
   - media
   - server
+  - tools
 
 # -- qBittorrent (torrents namespace)
 qbittorrent:
@@ -65,3 +66,17 @@ rustdesk:
   enabled: true
   image: rustdesk/rustdesk-server:latest
   hostNetwork: true
+
+# -- Homepage (tools namespace)
+homepage:
+  enabled: true
+  image: ghcr.io/gethomepage/homepage:latest
+  port: 3000
+  nodePort: 30300
+
+# -- IT-Tools (tools namespace)
+ittools:
+  enabled: true
+  image: corentinth/it-tools:latest
+  port: 80
+  nodePort: 30080

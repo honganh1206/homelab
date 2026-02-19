@@ -1,0 +1,46 @@
+{{- if .Values.homepage.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+    spec:
+      containers:
+        - name: homepage
+          image: {{ .Values.homepage.image }}
+          ports:
+            - containerPort: {{ .Values.homepage.port }}
+          env:
+            - name: HOMEPAGE_ALLOWED_HOSTS
+              value: "*"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+      volumes:
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/homepage/config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homepage
+  namespace: tools
+spec:
+  selector:
+    app: homepage
+  ports:
+    - port: {{ .Values.homepage.port }}
+      targetPort: {{ .Values.homepage.port }}
+      nodePort: {{ .Values.homepage.nodePort }}
+  type: NodePort
+{{- end }}
