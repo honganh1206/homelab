@@ -17,7 +17,6 @@ Homelab K3s infrastructure repo. Kubernetes manifests are managed via a Helm cha
 - `helm/homelab/Chart.yaml` — chart metadata
 - `helm/homelab/values.yaml` — centralized config (host paths, ports, images, env vars)
 - `helm/homelab/templates/` — templated manifests for all services
-- `k8s/` — legacy raw manifests (kept for reference)
 - Config data on host: `/home/hong/k8s-data/<namespace>/<service>/config`
 - Media on host: `/home/hong/Media/SeagateExpansion/Torrents/` and `.../WesternDigital/Torrents/`
 
