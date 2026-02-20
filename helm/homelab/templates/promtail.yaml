@@ -28,6 +28,14 @@ data:
             labels:
               job: kubernetes
               __path__: /var/log/pods/*/*/*.log
+        pipeline_stages:
+          - regex:
+              source: filename
+              expression: '/var/log/pods/(?P<namespace>[^_]+)_(?P<pod>[^_]+)_[^/]+/(?P<container>[^/]+)/.*'
+          - labels:
+              namespace:
+              pod:
+              container:
 ---
 apiVersion: apps/v1
 kind: DaemonSet

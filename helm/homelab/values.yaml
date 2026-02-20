@@ -166,6 +166,7 @@ loki:
   image: grafana/loki:latest
   port: 3100
   nodePort: 30310
+  retention: 7d
 
 # -- Promtail (monitoring namespace)
 promtail:
