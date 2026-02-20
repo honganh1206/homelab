@@ -1,0 +1,43 @@
+{{- if .Values.pairdrop.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pairdrop
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pairdrop
+  template:
+    metadata:
+      labels:
+        app: pairdrop
+    spec:
+      containers:
+        - name: pairdrop
+          image: {{ .Values.pairdrop.image }}
+          ports:
+            - containerPort: {{ .Values.pairdrop.port }}
+          env:
+            - name: PUID
+              value: {{ .Values.linuxserver.puid | quote }}
+            - name: PGID
+              value: {{ .Values.linuxserver.pgid | quote }}
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pairdrop
+  namespace: tools
+spec:
+  selector:
+    app: pairdrop
+  ports:
+    - port: {{ .Values.pairdrop.port }}
+      targetPort: {{ .Values.pairdrop.port }}
+      nodePort: {{ .Values.pairdrop.nodePort }}
+  type: NodePort
+{{- end }}

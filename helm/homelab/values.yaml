@@ -121,6 +121,12 @@ homepage:
         - name: Grafana
           icon: grafana.png
           port: 30030
+        - name: Filegator
+          icon: filegator.png
+          port: 30808
+        - name: Pairdrop
+          icon: pairdrop.png
+          port: 30303
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -170,6 +176,20 @@ promtail:
   enabled: true
   image: grafana/promtail:latest
   port: 9080
+
+# -- Filegator (tools namespace)
+filegator:
+  enabled: true
+  image: filegator/filegator:latest
+  port: 8080
+  nodePort: 30808
+
+# -- Pairdrop (tools namespace)
+pairdrop:
+  enabled: true
+  image: linuxserver/pairdrop:latest
+  port: 3000
+  nodePort: 30303
 
 # -- Samba (infra namespace)
 samba:

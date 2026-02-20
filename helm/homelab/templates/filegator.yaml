@@ -1,0 +1,58 @@
+{{- if .Values.filegator.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filegator
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filegator
+  template:
+    metadata:
+      labels:
+        app: filegator
+    spec:
+      containers:
+        - name: filegator
+          image: {{ .Values.filegator.image }}
+          ports:
+            - containerPort: {{ .Values.filegator.port }}
+          volumeMounts:
+            - name: config
+              mountPath: /var/www/filegator/private
+            - name: media-seagate
+              mountPath: /var/www/filegator/repository/SeagateExpansion
+            - name: media-wd
+              mountPath: /var/www/filegator/repository/WesternDigital
+            - name: k8s-config
+              mountPath: /var/www/filegator/repository/Config
+      volumes:
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/filegator/config
+        - name: media-seagate
+          hostPath:
+            path: {{ .Values.paths.seagate }}
+        - name: media-wd
+          hostPath:
+            path: {{ .Values.paths.westernDigital }}
+        - name: k8s-config
+          hostPath:
+            path: {{ .Values.paths.config }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filegator
+  namespace: tools
+spec:
+  selector:
+    app: filegator
+  ports:
+    - port: {{ .Values.filegator.port }}
+      targetPort: {{ .Values.filegator.port }}
+      nodePort: {{ .Values.filegator.nodePort }}
+  type: NodePort
+{{- end }}
