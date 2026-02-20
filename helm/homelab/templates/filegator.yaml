@@ -15,9 +15,9 @@ spec:
         app: filegator
     spec:
       initContainers:
-        - name: fix-permissions
-          image: busybox
-          command: ["sh", "-c", "mkdir -p /private/logs && chown -R 33:33 /private"]
+        - name: init-config
+          image: {{ .Values.filegator.image }}
+          command: ["sh", "-c", "mkdir -p /private/logs && cp -n /var/www/filegator/private/users.json.blank /private/ && [ -f /private/users.json ] || cp /private/users.json.blank /private/users.json && chown -R 33:33 /private"]
           volumeMounts:
             - name: config
               mountPath: /private
