@@ -1,0 +1,50 @@
+{{- if .Values.prowlarr.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: torrents
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      containers:
+        - name: prowlarr
+          image: {{ .Values.prowlarr.image }}
+          ports:
+            - containerPort: {{ .Values.prowlarr.port }}
+          env:
+            - name: PUID
+              value: {{ .Values.linuxserver.puid | quote }}
+            - name: PGID
+              value: {{ .Values.linuxserver.pgid | quote }}
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/torrents/prowlarr/config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  namespace: torrents
+spec:
+  selector:
+    app: prowlarr
+  ports:
+    - port: {{ .Values.prowlarr.port }}
+      targetPort: {{ .Values.prowlarr.port }}
+      nodePort: {{ .Values.prowlarr.nodePort }}
+  type: NodePort
+{{- end }}

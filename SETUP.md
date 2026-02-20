@@ -42,6 +42,7 @@ mkdir -p /home/hong/k8s-data/torrents/qbittorrent/config
 mkdir -p /home/hong/k8s-data/torrents/radarr/config
 mkdir -p /home/hong/k8s-data/torrents/sonarr/config
 mkdir -p /home/hong/k8s-data/torrents/bazarr/config
+mkdir -p /home/hong/k8s-data/torrents/prowlarr/config
 mkdir -p /home/hong/k8s-data/media/plex/config
 mkdir -p /home/hong/k8s-data/server/rustdesk/data
 mkdir -p /home/hong/k8s-data/tools/homepage/config
@@ -188,6 +189,7 @@ sudo systemctl disable --now plexmediaserver
 | Radarr      | `http://<mini-pc-ip>:30878`        | Movies library intact, qBit connection works |
 | Sonarr      | `http://<mini-pc-ip>:30989`        | Shows library intact, qBit connection works  |
 | Bazarr      | `http://<mini-pc-ip>:30767`        | Subtitle settings preserved                  |
+| Prowlarr    | `http://<mini-pc-ip>:30696`        | Indexers page loads, sync to Radarr/Sonarr   |
 | Plex        | `http://<mini-pc-ip>:32400/web`    | Libraries visible, playback works            |
 | Rustdesk    | Connect via Rustdesk client        | Remote access still works                    |
 | Homepage    | `http://<mini-pc-ip>:30300`        | Dashboard loads, can add service widgets     |

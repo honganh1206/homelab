@@ -55,6 +55,13 @@ bazarr:
   port: 6767
   nodePort: 30767
 
+# -- Prowlarr (torrents namespace)
+prowlarr:
+  enabled: true
+  image: lscr.io/linuxserver/prowlarr:latest
+  port: 9696
+  nodePort: 30696
+
 # -- Plex (media namespace)
 plex:
   enabled: true
@@ -90,6 +97,9 @@ homepage:
         - name: Bazarr
           icon: bazarr.png
           port: 30767
+        - name: Prowlarr
+          icon: prowlarr.png
+          port: 30696
     - group: Media
       items:
         - name: Plex
