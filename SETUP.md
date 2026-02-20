@@ -49,6 +49,7 @@ mkdir -p /home/hong/k8s-data/tools/homepage/config
 mkdir -p /home/hong/k8s-data/tools/stirling-pdf/configs
 mkdir -p /home/hong/k8s-data/infra/prometheus/data
 mkdir -p /home/hong/k8s-data/infra/grafana/data
+mkdir -p /home/hong/k8s-data/monitoring/loki/data
 ```
 
 ## Step 3: Migrate existing configs
@@ -197,6 +198,7 @@ sudo systemctl disable --now plexmediaserver
 | Stirling PDF| `http://<mini-pc-ip>:30880`        | PDF tools page loads                         |
 | Prometheus  | `http://<mini-pc-ip>:30090`        | Targets page shows node-exporter UP          |
 | Grafana     | `http://<mini-pc-ip>:30030`        | Login with admin/admin, change password      |
+| Loki        | `http://<mini-pc-ip>:30310/ready`  | Returns "ready" when Loki is up              |
 | Samba       | `\\<mini-pc-ip>\Media` via explorer | Shared folders visible                       |
 
 ### Post-deploy: Update Radarr/Sonarr download client

@@ -17,6 +17,7 @@ namespaces:
   - server
   - tools
   - infra
+  - monitoring
 
 # -- qBittorrent (torrents namespace)
 qbittorrent:
@@ -120,6 +121,9 @@ homepage:
         - name: Grafana
           icon: grafana.png
           port: 30030
+        - name: Loki
+          icon: loki.png
+          port: 30310
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -155,6 +159,19 @@ grafana:
   image: grafana/grafana:latest
   port: 3000
   nodePort: 30030
+
+# -- Loki (monitoring namespace)
+loki:
+  enabled: true
+  image: grafana/loki:latest
+  port: 3100
+  nodePort: 30310
+
+# -- Promtail (monitoring namespace)
+promtail:
+  enabled: true
+  image: grafana/promtail:latest
+  port: 9080
 
 # -- Samba (infra namespace)
 samba:
