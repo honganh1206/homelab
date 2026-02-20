@@ -14,6 +14,13 @@ spec:
       labels:
         app: filegator
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "mkdir -p /private/logs && chown -R 33:33 /private"]
+          volumeMounts:
+            - name: config
+              mountPath: /private
       containers:
         - name: filegator
           image: {{ .Values.filegator.image }}
