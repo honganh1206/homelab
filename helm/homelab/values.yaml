@@ -186,7 +186,7 @@ alertmanager:
   image: prom/alertmanager:latest
   port: 9093
   nodePort: 30903
-  emailTo: "you@example.com"
+  emailTo: "phamhonganhbackup@12062000@gmail.com"
   emailFrom: "alertmanager@homelab.local"
   smarthost: "smtp.gmail.com:587"
 
