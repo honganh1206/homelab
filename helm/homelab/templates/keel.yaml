@@ -62,6 +62,10 @@ spec:
               value: "1"
             - name: KEEL_POLL_SCHEDULE
               value: {{ .Values.keel.pollSchedule | quote }}
+            - name: BASIC_AUTH_USER
+              value: {{ .Values.keel.adminUser | quote }}
+            - name: BASIC_AUTH_PASSWORD
+              value: {{ .Values.keel.adminPassword | quote }}
 ---
 apiVersion: v1
 kind: Service

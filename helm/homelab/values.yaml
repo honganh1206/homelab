@@ -118,6 +118,9 @@ homepage:
         - name: Grafana
           icon: grafana.png
           port: 30030
+        - name: Keel
+          icon: keel.png
+          port: 30930
         - name: Filegator
           icon: filegator.png
           port: 30808
@@ -187,6 +190,8 @@ keel:
   port: 9300
   nodePort: 30930
   pollSchedule: "@every 12h"
+  adminUser: admin
+  adminPassword: admin
 
 # -- Filegator (tools namespace)
 filegator:
