@@ -17,8 +17,8 @@ data:
           - to: {{ .Values.alertmanager.emailTo | quote }}
             from: {{ .Values.alertmanager.emailFrom | quote }}
             smarthost: {{ .Values.alertmanager.smarthost | quote }}
-            auth_username: $(SMTP_USER)
-            auth_password: $(SMTP_PASS)
+            auth_username: __SMTP_USER__
+            auth_password: __SMTP_PASS__
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,7 +38,11 @@ spec:
       initContainers:
         - name: render-config
           image: busybox
-          command: ["sh", "-c", "sed -e \"s/\\$(SMTP_USER)/$SMTP_USER/g\" -e \"s/\\$(SMTP_PASS)/$SMTP_PASS/g\" /configmap/alertmanager.yml > /config/alertmanager.yml"]
+          command:
+            - sh
+            - -c
+            - |
+              sed "s/__SMTP_USER__/$SMTP_USER/g;s/__SMTP_PASS__/$SMTP_PASS/g" /configmap/alertmanager.yml > /config/alertmanager.yml
           env:
             - name: SMTP_USER
               valueFrom:
