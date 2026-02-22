@@ -46,7 +46,6 @@ mkdir -p /home/hong/k8s-data/torrents/prowlarr/config
 mkdir -p /home/hong/k8s-data/media/plex/config
 mkdir -p /home/hong/k8s-data/server/rustdesk/data
 mkdir -p /home/hong/k8s-data/tools/homepage/config
-mkdir -p /home/hong/k8s-data/tools/stirling-pdf/configs
 mkdir -p /home/hong/k8s-data/tools/filegator/config
 mkdir -p /home/hong/k8s-data/infra/prometheus/data
 mkdir -p /home/hong/k8s-data/infra/grafana/data
@@ -209,7 +208,6 @@ sudo systemctl disable --now plexmediaserver
 | Rustdesk    | Connect via Rustdesk client        | Remote access still works                    |
 | Homepage    | `http://<mini-pc-ip>:30300`        | Dashboard loads, can add service widgets     |
 | IT-Tools    | `http://<mini-pc-ip>:30080`        | Tools page loads                             |
-| Stirling PDF| `http://<mini-pc-ip>:30880`        | PDF tools page loads                         |
 | Prometheus  | `http://<mini-pc-ip>:30090`        | Targets page shows node-exporter UP          |
 | Grafana     | `http://<mini-pc-ip>:30030`        | Login with admin/admin, change password      |
 | Loki        | `http://<mini-pc-ip>:30310/ready`  | Returns "ready" when Loki is up              |

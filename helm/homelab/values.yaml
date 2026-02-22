@@ -112,9 +112,6 @@ homepage:
         - name: IT-Tools
           icon: it-tools.png
           port: 30080
-        - name: Stirling PDF
-          icon: stirling-pdf.png
-          port: 30880
         - name: Prometheus
           icon: prometheus.png
           port: 30090
@@ -137,13 +134,6 @@ ittools:
   image: corentinth/it-tools:latest
   port: 80
   nodePort: 30080
-
-# -- Stirling PDF (tools namespace)
-stirlingpdf:
-  enabled: true
-  image: stirlingtools/stirling-pdf:latest
-  port: 8080
-  nodePort: 30880
 
 # -- Node Exporter (infra namespace)
 nodeExporter:
