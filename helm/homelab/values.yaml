@@ -127,6 +127,9 @@ homepage:
         - name: Pairdrop
           icon: pairdrop.png
           port: 30303
+        - name: Headlamp
+          icon: headlamp.png
+          port: 30469
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -208,6 +211,14 @@ pairdrop:
   image: linuxserver/pairdrop:latest
   port: 3000
   nodePort: 30303
+
+# -- Headlamp (infra namespace)
+headlamp:
+  enabled: true
+  image: ghcr.io/headlamp-k8s/headlamp:latest
+  port: 4466
+  servicePort: 80
+  nodePort: 30469
 
 # -- Samba (infra namespace)
 samba:

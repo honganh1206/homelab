@@ -217,7 +217,21 @@ sudo systemctl disable --now plexmediaserver
 | Keel        | `http://<mini-pc-ip>:30930`        | Web UI loads, shows tracked deployments      |
 | Filegator   | `http://<mini-pc-ip>:30808`        | File manager loads, media dirs visible       |
 | Pairdrop    | `http://<mini-pc-ip>:30303`        | Pairdrop UI loads, devices discoverable      |
+| Headlamp   | `http://<mini-pc-ip>:30469`        | Login page loads, paste service account token|
 | Samba       | `\\<mini-pc-ip>\Media` via explorer | Shared folders visible                       |
+
+### Post-deploy: Generate Headlamp login token
+
+Headlamp requires a service account token to log in. Generate one with:
+
+```bash
+kubectl create token headlamp -n infra
+```
+
+Paste the token into the Headlamp login page at `http://<mini-pc-ip>:30469`.
+
+> **Note:** Tokens created with `kubectl create token` expire after 1 hour by default.
+> For a longer-lived token, add `--duration=8760h` (1 year).
 
 ### Post-deploy: Update Radarr/Sonarr download client
 
