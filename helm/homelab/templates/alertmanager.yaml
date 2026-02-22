@@ -17,8 +17,8 @@ data:
           - to: {{ .Values.alertmanager.emailTo | quote }}
             from: {{ .Values.alertmanager.emailFrom | quote }}
             smarthost: {{ .Values.alertmanager.smarthost | quote }}
-            auth_username_file: /etc/alertmanager/secrets/auth_username
-            auth_password_file: /etc/alertmanager/secrets/auth_password
+            auth_username: $(SMTP_USER)
+            auth_password: $(SMTP_PASS)
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -42,20 +42,25 @@ spec:
             - --config.file=/etc/alertmanager/alertmanager.yml
           ports:
             - containerPort: {{ .Values.alertmanager.port }}
+          env:
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: alertmanager-smtp
+                  key: auth_username
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: alertmanager-smtp
+                  key: auth_password
           volumeMounts:
             - name: config
               mountPath: /etc/alertmanager/alertmanager.yml
               subPath: alertmanager.yml
-            - name: secrets
-              mountPath: /etc/alertmanager/secrets
-              readOnly: true
       volumes:
         - name: config
           configMap:
             name: alertmanager-config
-        - name: secrets
-          secret:
-            secretName: alertmanager-smtp
 ---
 apiVersion: v1
 kind: Service
