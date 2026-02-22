@@ -177,6 +177,16 @@ promtail:
   image: grafana/promtail:latest
   port: 9080
 
+# -- Alertmanager (infra namespace)
+alertmanager:
+  enabled: true
+  image: prom/alertmanager:latest
+  port: 9093
+  nodePort: 30903
+  emailTo: "you@example.com"
+  emailFrom: "alertmanager@homelab.local"
+  smarthost: "smtp.gmail.com:587"
+
 # -- Keel (infra namespace)
 keel:
   enabled: true

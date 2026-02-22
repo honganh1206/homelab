@@ -53,6 +53,19 @@ mkdir -p /home/hong/k8s-data/infra/grafana/data
 mkdir -p /home/hong/k8s-data/monitoring/loki/data
 ```
 
+## Step 2b: Create Kubernetes secrets
+
+These secrets are not managed by Helm and must be created manually on the cluster.
+
+```bash
+# SMTP credentials for Alertmanager email notifications
+kubectl create namespace infra --dry-run=client -o yaml | kubectl apply -f -
+kubectl create secret generic alertmanager-smtp \
+  --namespace=infra \
+  --from-literal=auth_username=<your-email> \
+  --from-literal=auth_password=<your-app-password>
+```
+
 ## Step 3: Migrate existing configs
 
 If you have existing local installations, copy their configs before deploying:
@@ -200,6 +213,7 @@ sudo systemctl disable --now plexmediaserver
 | Prometheus  | `http://<mini-pc-ip>:30090`        | Targets page shows node-exporter UP          |
 | Grafana     | `http://<mini-pc-ip>:30030`        | Login with admin/admin, change password      |
 | Loki        | `http://<mini-pc-ip>:30310/ready`  | Returns "ready" when Loki is up              |
+| Alertmanager| `http://<mini-pc-ip>:30903`        | Web UI loads, shows alert status             |
 | Keel        | `http://<mini-pc-ip>:30930`        | Web UI loads, shows tracked deployments      |
 | Filegator   | `http://<mini-pc-ip>:30808`        | File manager loads, media dirs visible       |
 | Pairdrop    | `http://<mini-pc-ip>:30303`        | Pairdrop UI loads, devices discoverable      |

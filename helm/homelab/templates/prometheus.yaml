@@ -8,11 +8,56 @@ data:
   prometheus.yml: |
     global:
       scrape_interval: 15s
+    {{- if .Values.alertmanager.enabled }}
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+                - alertmanager:{{ .Values.alertmanager.port }}
+    rule_files:
+      - /etc/prometheus/alert-rules.yml
+    {{- end }}
     scrape_configs:
       - job_name: node-exporter
         static_configs:
           - targets:
               - node-exporter:{{ .Values.nodeExporter.port }}
+  {{- if .Values.alertmanager.enabled }}
+  alert-rules.yml: |
+    groups:
+      - name: node
+        rules:
+          - alert: HighCpuUsage
+            expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "CPU usage above 90% for 5 minutes"
+          - alert: HighMemoryUsage
+            expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 90
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Memory usage above 90% for 5 minutes"
+          - alert: DiskSpaceLow
+            expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 15
+            for: 10m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Root filesystem has less than 15% free space"
+      - name: pods
+        rules:
+          - alert: PodCrashLooping
+            expr: increase(kube_pod_container_status_restarts_total[1h]) > 3
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Pod {{ "{{" }} $labels.pod {{ "}}" }} restarting frequently"
+  {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +89,11 @@ spec:
             - name: config
               mountPath: /etc/prometheus/prometheus.yml
               subPath: prometheus.yml
+            {{- if .Values.alertmanager.enabled }}
+            - name: config
+              mountPath: /etc/prometheus/alert-rules.yml
+              subPath: alert-rules.yml
+            {{- end }}
             - name: data
               mountPath: /prometheus
       volumes:

@@ -1,0 +1,73 @@
+{{- if .Values.alertmanager.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: infra
+data:
+  alertmanager.yml: |
+    route:
+      receiver: email
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+    receivers:
+      - name: email
+        email_configs:
+          - to: {{ .Values.alertmanager.emailTo | quote }}
+            from: {{ .Values.alertmanager.emailFrom | quote }}
+            smarthost: {{ .Values.alertmanager.smarthost | quote }}
+            auth_username_file: /etc/alertmanager/secrets/auth_username
+            auth_password_file: /etc/alertmanager/secrets/auth_password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+        - name: alertmanager
+          image: {{ .Values.alertmanager.image }}
+          args:
+            - --config.file=/etc/alertmanager/alertmanager.yml
+          ports:
+            - containerPort: {{ .Values.alertmanager.port }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/alertmanager/alertmanager.yml
+              subPath: alertmanager.yml
+            - name: secrets
+              mountPath: /etc/alertmanager/secrets
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: alertmanager-config
+        - name: secrets
+          secret:
+            secretName: alertmanager-smtp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+  namespace: infra
+spec:
+  selector:
+    app: alertmanager
+  ports:
+    - port: {{ .Values.alertmanager.port }}
+      targetPort: {{ .Values.alertmanager.port }}
+      nodePort: {{ .Values.alertmanager.nodePort }}
+  type: NodePort
+{{- end }}
