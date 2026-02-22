@@ -177,6 +177,14 @@ promtail:
   image: grafana/promtail:latest
   port: 9080
 
+# -- Keel (infra namespace)
+keel:
+  enabled: true
+  image: keelhq/keel:latest
+  port: 9300
+  nodePort: 30930
+  pollSchedule: "@every 12h"
+
 # -- Filegator (tools namespace)
 filegator:
   enabled: true

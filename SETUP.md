@@ -200,6 +200,7 @@ sudo systemctl disable --now plexmediaserver
 | Prometheus  | `http://<mini-pc-ip>:30090`        | Targets page shows node-exporter UP          |
 | Grafana     | `http://<mini-pc-ip>:30030`        | Login with admin/admin, change password      |
 | Loki        | `http://<mini-pc-ip>:30310/ready`  | Returns "ready" when Loki is up              |
+| Keel        | `http://<mini-pc-ip>:30930`        | Web UI loads, shows tracked deployments      |
 | Filegator   | `http://<mini-pc-ip>:30808`        | File manager loads, media dirs visible       |
 | Pairdrop    | `http://<mini-pc-ip>:30303`        | Pairdrop UI loads, devices discoverable      |
 | Samba       | `\\<mini-pc-ip>\Media` via explorer | Shared folders visible                       |
