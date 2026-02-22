@@ -35,13 +35,10 @@ spec:
       labels:
         app: alertmanager
     spec:
-      containers:
-        - name: alertmanager
-          image: {{ .Values.alertmanager.image }}
-          args:
-            - --config.file=/etc/alertmanager/alertmanager.yml
-          ports:
-            - containerPort: {{ .Values.alertmanager.port }}
+      initContainers:
+        - name: render-config
+          image: busybox
+          command: ["sh", "-c", "sed -e \"s/\\$(SMTP_USER)/$SMTP_USER/g\" -e \"s/\\$(SMTP_PASS)/$SMTP_PASS/g\" /configmap/alertmanager.yml > /config/alertmanager.yml"]
           env:
             - name: SMTP_USER
               valueFrom:
@@ -54,13 +51,26 @@ spec:
                   name: alertmanager-smtp
                   key: auth_password
           volumeMounts:
+            - name: configmap
+              mountPath: /configmap
             - name: config
-              mountPath: /etc/alertmanager/alertmanager.yml
-              subPath: alertmanager.yml
+              mountPath: /config
+      containers:
+        - name: alertmanager
+          image: {{ .Values.alertmanager.image }}
+          args:
+            - --config.file=/etc/alertmanager/alertmanager.yml
+          ports:
+            - containerPort: {{ .Values.alertmanager.port }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/alertmanager
       volumes:
-        - name: config
+        - name: configmap
           configMap:
             name: alertmanager-config
+        - name: config
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
