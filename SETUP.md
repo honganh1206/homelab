@@ -220,16 +220,13 @@ sudo systemctl disable --now plexmediaserver
 
 ### Post-deploy: Generate Headlamp login token
 
-Headlamp requires a service account token to log in. Generate one with:
+Headlamp requires a service account token to log in. The Helm chart creates a long-lived token Secret automatically. Retrieve it with:
 
 ```bash
-kubectl create token headlamp -n infra
+kubectl get secret headlamp-token -n infra -o jsonpath='{.data.token}' | base64 -d
 ```
 
-Paste the token into the Headlamp login page at `http://<mini-pc-ip>:30469`.
-
-> **Note:** Tokens created with `kubectl create token` expire after 1 hour by default.
-> For a longer-lived token, add `--duration=8760h` (1 year).
+Paste the token into the Headlamp login page at `http://<mini-pc-ip>:30469`. This token does not expire.
 
 ### Post-deploy: Update Radarr/Sonarr download client
 

@@ -1,5 +1,33 @@
 {{- if .Values.promtail.enabled }}
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: promtail
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: promtail
+rules:
+  - apiGroups: [""]
+    resources: ["nodes", "nodes/proxy", "pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: promtail
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: promtail
+subjects:
+  - kind: ServiceAccount
+    name: promtail
+    namespace: monitoring
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: promtail-config
@@ -14,33 +42,32 @@ data:
     clients:
       - url: http://loki.monitoring.svc.cluster.local:{{ .Values.loki.port }}/loki/api/v1/push
     scrape_configs:
-      - job_name: varlogs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: varlogs
-              __path__: /var/log/*log
       - job_name: kubernetes-pods
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: kubernetes
-              __path__: /var/log/pods/*/*/*.log
+        pipeline_stages:
+          - cri: {}
+        kubernetes_sd_configs:
+          - role: pod
         relabel_configs:
-          - source_labels: [__path__]
-            regex: /var/log/pods
+          - source_labels: [__meta_kubernetes_namespace]
             target_label: namespace
-            replacement: $1
-          - source_labels: [__path__]
-            regex: /var/log/pods
+          - source_labels: [__meta_kubernetes_pod_name]
             target_label: pod
-            replacement: $2
-          - source_labels: [__path__]
-            regex: /var/log/pods
+          - source_labels: [__meta_kubernetes_pod_container_name]
             target_label: container
-            replacement: $3
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: node
+          - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              - __meta_kubernetes_pod_label_app
+              - __meta_kubernetes_pod_name
+            regex: ^;*([^;]+)(;.*)?$
+            target_label: app
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -56,6 +83,7 @@ spec:
       labels:
         app: promtail
     spec:
+      serviceAccountName: promtail
       containers:
         - name: promtail
           image: {{ .Values.promtail.image }}
@@ -71,6 +99,9 @@ spec:
             - name: pods
               mountPath: /var/log/pods
               readOnly: true
+            - name: containers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
       volumes:
         - name: config
           configMap:
@@ -81,4 +112,7 @@ spec:
         - name: pods
           hostPath:
             path: /var/log/pods
+        - name: containers
+          hostPath:
+            path: /var/lib/docker/containers
 {{- end }}

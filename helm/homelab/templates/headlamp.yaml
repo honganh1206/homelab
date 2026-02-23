@@ -5,6 +5,15 @@ metadata:
   name: headlamp
   namespace: infra
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: headlamp-token
+  namespace: infra
+  annotations:
+    kubernetes.io/service-account.name: headlamp
+type: kubernetes.io/service-account-token
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
