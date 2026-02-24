@@ -28,19 +28,6 @@ data:
             labels:
               job: kubernetes
               __path__: /var/log/pods/*/*/*.log
-        relabel_configs:
-          - source_labels: [__path__]
-            regex: /var/log/pods
-            target_label: namespace
-            replacement: $1
-          - source_labels: [__path__]
-            regex: /var/log/pods
-            target_label: pod
-            replacement: $2
-          - source_labels: [__path__]
-            regex: /var/log/pods
-            target_label: container
-            replacement: $3
 ---
 apiVersion: apps/v1
 kind: DaemonSet
