@@ -1,4 +1,29 @@
 {{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: infra
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus.infra.svc.cluster.local:{{ .Values.prometheus.port }}
+        isDefault: true
+        editable: true
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.monitoring.svc.cluster.local:{{ .Values.loki.port }}
+        editable: true
+        jsonData:
+          httpHeaderName1: X-Scope-OrgID
+        secureJsonData:
+          httpHeaderValue1: "fake"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,10 +50,15 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/grafana
+            - name: datasources
+              mountPath: /etc/grafana/provisioning/datasources
       volumes:
         - name: data
           hostPath:
             path: {{ .Values.paths.config }}/infra/grafana/data
+        - name: datasources
+          configMap:
+            name: grafana-datasources
 ---
 apiVersion: v1
 kind: Service
