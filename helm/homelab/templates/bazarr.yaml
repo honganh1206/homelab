@@ -14,6 +14,13 @@ spec:
       labels:
         app: bazarr
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /config"]
+          volumeMounts:
+            - name: config
+              mountPath: /config
       containers:
         - name: bazarr
           image: {{ .Values.bazarr.image }}

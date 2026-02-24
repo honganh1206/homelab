@@ -15,6 +15,13 @@ spec:
         app: plex
     spec:
       hostNetwork: {{ .Values.plex.hostNetwork }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /config"]
+          volumeMounts:
+            - name: config
+              mountPath: /config
       containers:
         - name: plex
           image: {{ .Values.plex.image }}
