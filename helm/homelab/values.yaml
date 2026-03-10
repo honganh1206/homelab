@@ -207,6 +207,24 @@ pairdrop:
   port: 3000
   nodePort: 30303
 
+# -- Dex OIDC provider (infra namespace)
+dex:
+  enabled: true
+  image: ghcr.io/dexidp/dex:v2.41.1
+  port: 5556
+  nodePort: 30556
+  issuer: http://192.168.1.105:30556/dex
+  staticClient:
+    id: headlamp
+    name: Headlamp
+    redirectURIs:
+      - http://192.168.1.105:30469/oidc-callback
+  staticPasswords:
+    - email: admin@homelab.local
+      # bcrypt hash of "admin" — change this!
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      username: admin
+
 # -- Headlamp (infra namespace)
 headlamp:
   enabled: true
@@ -214,6 +232,9 @@ headlamp:
   port: 4466
   servicePort: 80
   nodePort: 30469
+  oidc:
+    clientID: headlamp
+    issuerURL: http://192.168.1.105:30556/dex
 
 # -- Samba (infra namespace)
 samba:

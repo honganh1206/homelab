@@ -49,7 +49,11 @@ spec:
           args:
             - "-in-cluster"
             - "-plugins-dir=/headlamp/plugins"
-            - "-token-ttl=0"
+            {{- if .Values.headlamp.oidc }}
+            - "-oidc-client-id={{ .Values.headlamp.oidc.clientID }}"
+            - "-oidc-idp-issuer-url={{ .Values.headlamp.oidc.issuerURL }}"
+            - "-oidc-scopes=profile,email,groups"
+            {{- end }}
           ports:
             - containerPort: {{ .Values.headlamp.port }}
 ---
