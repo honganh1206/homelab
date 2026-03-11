@@ -51,6 +51,7 @@ spec:
             - "-plugins-dir=/headlamp/plugins"
             {{- if .Values.headlamp.oidc }}
             - "-oidc-client-id={{ .Values.headlamp.oidc.clientID }}"
+            - "-oidc-client-secret={{ .Values.headlamp.oidc.clientSecret }}"
             - "-oidc-idp-issuer-url={{ .Values.headlamp.oidc.issuerURL }}"
             - "-oidc-scopes=profile,email,groups"
             {{- end }}

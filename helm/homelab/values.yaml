@@ -216,6 +216,7 @@ dex:
   issuer: http://192.168.1.105:30556/dex
   staticClient:
     id: headlamp
+    secret: headlamp-secret
     name: Headlamp
     redirectURIs:
       - http://192.168.1.105:30469/oidc-callback
@@ -234,6 +235,7 @@ headlamp:
   nodePort: 30469
   oidc:
     clientID: headlamp
+    clientSecret: headlamp-secret
     issuerURL: http://192.168.1.105:30556/dex
 
 # -- Samba (infra namespace)

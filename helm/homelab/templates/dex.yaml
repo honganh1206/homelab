@@ -15,12 +15,12 @@ data:
       http: 0.0.0.0:{{ .Values.dex.port }}
     staticClients:
       - id: {{ .Values.dex.staticClient.id }}
+        secret: {{ .Values.dex.staticClient.secret }}
         name: {{ .Values.dex.staticClient.name }}
         redirectURIs:
         {{- range .Values.dex.staticClient.redirectURIs }}
           - {{ . | quote }}
         {{- end }}
-        public: true
     enablePasswordDB: true
     staticPasswords:
     {{- range .Values.dex.staticPasswords }}
