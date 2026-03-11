@@ -223,7 +223,7 @@ dex:
   staticPasswords:
     - email: admin@homelab.local
       # bcrypt hash of "admin" — change this!
-      hash: "$2b$10$s7MHozycP0tzYgFqHAX8bOL5OflqI/VQRB9QojKpzvb68azvIGMoq"
+      hash: "$2y$10$.BGmiBCm6Xr6xXDmmjgwxeh.Yym9p9TO.AHE41CIFSQfdNKZnHFuO"
       username: admin
 
 # -- Headlamp (infra namespace)
