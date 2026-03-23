@@ -1,78 +1,78 @@
-{{- if .Values.dex.enabled }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: dex-config
-  namespace: infra
-data:
-  config.yaml: |
-    issuer: {{ .Values.dex.issuer }}
-    storage:
-      type: sqlite3
-      config:
-        file: /var/dex/dex.db
-    web:
-      http: 0.0.0.0:{{ .Values.dex.port }}
-    staticClients:
-      - id: {{ .Values.dex.staticClient.id }}
-        secret: {{ .Values.dex.staticClient.secret }}
-        name: {{ .Values.dex.staticClient.name }}
-        redirectURIs:
-        {{- range .Values.dex.staticClient.redirectURIs }}
-          - {{ . | quote }}
-        {{- end }}
-    enablePasswordDB: true
-    staticPasswords:
-    {{- range .Values.dex.staticPasswords }}
-      - email: {{ .email | quote }}
-        hash: {{ .hash | quote }}
-        username: {{ .username | quote }}
-    {{- end }}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: dex
-  namespace: infra
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: dex
-  template:
-    metadata:
-      labels:
-        app: dex
-    spec:
-      containers:
-        - name: dex
-          image: {{ .Values.dex.image }}
-          command: ["dex", "serve", "/etc/dex/config.yaml"]
-          ports:
-            - containerPort: {{ .Values.dex.port }}
-          volumeMounts:
-            - name: config
-              mountPath: /etc/dex
-            - name: data
-              mountPath: /var/dex
-      volumes:
-        - name: config
-          configMap:
-            name: dex-config
-        - name: data
-          emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: dex
-  namespace: infra
-spec:
-  selector:
-    app: dex
-  ports:
-    - port: {{ .Values.dex.port }}
-      targetPort: {{ .Values.dex.port }}
-      nodePort: {{ .Values.dex.nodePort }}
-  type: NodePort
-{{- end }}
+# {{- if .Values.dex.enabled }}
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: dex-config
+#   namespace: infra
+# data:
+#   config.yaml: |
+#     issuer: {{ .Values.dex.issuer }}
+#     storage:
+#       type: sqlite3
+#       config:
+#         file: /var/dex/dex.db
+#     web:
+#       http: 0.0.0.0:{{ .Values.dex.port }}
+#     staticClients:
+#       - id: {{ .Values.dex.staticClient.id }}
+#         secret: {{ .Values.dex.staticClient.secret }}
+#         name: {{ .Values.dex.staticClient.name }}
+#         redirectURIs:
+#         {{- range .Values.dex.staticClient.redirectURIs }}
+#           - {{ . | quote }}
+#         {{- end }}
+#     enablePasswordDB: true
+#     staticPasswords:
+#     {{- range .Values.dex.staticPasswords }}
+#       - email: {{ .email | quote }}
+#         hash: {{ .hash | quote }}
+#         username: {{ .username | quote }}
+#     {{- end }}
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: dex
+#   namespace: infra
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: dex
+#   template:
+#     metadata:
+#       labels:
+#         app: dex
+#     spec:
+#       containers:
+#         - name: dex
+#           image: {{ .Values.dex.image }}
+#           command: ["dex", "serve", "/etc/dex/config.yaml"]
+#           ports:
+#             - containerPort: {{ .Values.dex.port }}
+#           volumeMounts:
+#             - name: config
+#               mountPath: /etc/dex
+#             - name: data
+#               mountPath: /var/dex
+#       volumes:
+#         - name: config
+#           configMap:
+#             name: dex-config
+#         - name: data
+#           emptyDir: {}
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: dex
+#   namespace: infra
+# spec:
+#   selector:
+#     app: dex
+#   ports:
+#     - port: {{ .Values.dex.port }}
+#       targetPort: {{ .Values.dex.port }}
+#       nodePort: {{ .Values.dex.nodePort }}
+#   type: NodePort
+# {{- end }}
