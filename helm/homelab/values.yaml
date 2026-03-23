@@ -130,6 +130,9 @@ homepage:
         - name: Headlamp
           icon: headlamp.png
           port: 30469
+        - name: JobOps
+          icon: mdi-briefcase-search
+          port: 30005
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -237,6 +240,13 @@ headlamp:
     clientID: headlamp
     clientSecret: headlamp-secret
     issuerURL: http://192.168.1.105:30556/dex
+
+# -- JobOps (tools namespace)
+jobops:
+  enabled: true
+  image: ghcr.io/dakheera47/job-ops:latest
+  port: 3001
+  nodePort: 30005
 
 # -- Samba (infra namespace)
 samba:

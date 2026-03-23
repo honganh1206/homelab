@@ -1,0 +1,64 @@
+{{- if .Values.jobops.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobops
+  namespace: tools
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jobops
+  template:
+    metadata:
+      labels:
+        app: jobops
+    spec:
+      containers:
+        - name: jobops
+          image: {{ .Values.jobops.image }}
+          ports:
+            - containerPort: {{ .Values.jobops.port }}
+          env:
+            - name: PUID
+              value: {{ .Values.linuxserver.puid | quote }}
+            - name: PGID
+              value: {{ .Values.linuxserver.pgid | quote }}
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.jobops.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.jobops.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: data
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/jobops/data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobops
+  namespace: tools
+spec:
+  selector:
+    app: jobops
+  ports:
+    - port: {{ .Values.jobops.port }}
+      targetPort: {{ .Values.jobops.port }}
+      nodePort: {{ .Values.jobops.nodePort }}
+  type: NodePort
+{{- end }}
