@@ -1,0 +1,77 @@
+{{- if .Values.caddy.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: tools
+data:
+  Caddyfile: |
+    :{{ .Values.caddy.vaultwardenPort }} {
+      tls internal
+      reverse_proxy vaultwarden.tools.svc.cluster.local:{{ .Values.vaultwarden.port }}
+    }
+
+    :{{ .Values.caddy.ntfyPort }} {
+      tls internal
+      reverse_proxy ntfy.tools.svc.cluster.local:{{ .Values.ntfy.port }}
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+        - name: caddy
+          image: {{ .Values.caddy.image }}
+          ports:
+            - containerPort: {{ .Values.caddy.vaultwardenPort }}
+            - containerPort: {{ .Values.caddy.ntfyPort }}
+          volumeMounts:
+            - name: caddyfile
+              mountPath: /etc/caddy/Caddyfile
+              subPath: Caddyfile
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: caddyfile
+          configMap:
+            name: caddy-config
+        - name: data
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/caddy/data
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/caddy/config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy
+  namespace: tools
+spec:
+  selector:
+    app: caddy
+  ports:
+    - name: vaultwarden
+      port: {{ .Values.caddy.vaultwardenPort }}
+      targetPort: {{ .Values.caddy.vaultwardenPort }}
+      nodePort: {{ .Values.caddy.vaultwardenNodePort }}
+    - name: ntfy
+      port: {{ .Values.caddy.ntfyPort }}
+      targetPort: {{ .Values.caddy.ntfyPort }}
+      nodePort: {{ .Values.caddy.ntfyNodePort }}
+  type: NodePort
+{{- end }}
