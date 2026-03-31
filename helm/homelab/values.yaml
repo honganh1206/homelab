@@ -133,6 +133,26 @@ homepage:
         - name: JobOps
           icon: mdi-briefcase-search
           port: 30005
+        - name: Pi-hole
+          icon: pi-hole.png
+          port: 8053
+    - group: Services
+      items:
+        - name: Uptime Kuma
+          icon: uptime-kuma.png
+          port: 30301
+        - name: Speedtest Tracker
+          icon: speedtest-tracker.png
+          port: 30180
+        - name: Ntfy
+          icon: ntfy.png
+          port: 30280
+        - name: Vaultwarden
+          icon: vaultwarden.png
+          port: 30380
+        - name: Immich
+          icon: immich.png
+          port: 30283
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -248,8 +268,57 @@ jobops:
   port: 3001
   nodePort: 30005
 
+# -- Pi-hole (infra namespace)
+pihole:
+  enabled: true
+  image: pihole/pihole:latest
+  webPort: 8053
+  webPassword: "changeme"
+
+# -- Immich (tools namespace)
+immich:
+  enabled: false
+  image: ghcr.io/immich-app/immich-server:release
+  mlImage: ghcr.io/immich-app/immich-machine-learning:release
+  postgresImage: tensorchord/pgvecto-rs:pg16-v0.2.0
+  redisImage: redis:7-alpine
+  port: 2283
+  nodePort: 30283
+  dbPassword: "changeme"
+
 # -- Samba (infra namespace)
 samba:
   enabled: true
   image: dperson/samba:latest
   port: 445
+
+# -- Uptime Kuma (tools namespace)
+uptimeKuma:
+  enabled: true
+  image: louislam/uptime-kuma:latest
+  port: 3001
+  nodePort: 30301
+
+# -- Speedtest Tracker (tools namespace)
+speedtestTracker:
+  enabled: true
+  image: lscr.io/linuxserver/speedtest-tracker:latest
+  port: 80
+  nodePort: 30180
+  appKey: "base64:changeme"
+  schedule: "0 */6 * * *"
+  appUrl: "http://192.168.1.105:30180"
+
+# -- ntfy (tools namespace)
+ntfy:
+  enabled: true
+  image: binwiederhier/ntfy:latest
+  port: 80
+  nodePort: 30280
+
+# -- Vaultwarden (tools namespace)
+vaultwarden:
+  enabled: true
+  image: vaultwarden/server:latest
+  port: 80
+  nodePort: 30380

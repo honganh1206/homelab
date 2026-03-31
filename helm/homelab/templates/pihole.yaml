@@ -1,0 +1,55 @@
+{{- if .Values.pihole.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: infra
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: pihole
+          image: {{ .Values.pihole.image }}
+          ports:
+            - containerPort: 53
+              protocol: TCP
+            - containerPort: 53
+              protocol: UDP
+            - containerPort: {{ .Values.pihole.webPort }}
+              protocol: TCP
+          env:
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+            - name: FTLCONF_webserver_api_password
+              value: {{ .Values.pihole.webPassword | quote }}
+            - name: FTLCONF_dns_listeningMode
+              value: "ALL"
+            - name: FTLCONF_webserver_port
+              value: {{ .Values.pihole.webPort | quote }}
+            - name: PIHOLE_UID
+              value: {{ .Values.linuxserver.puid | quote }}
+            - name: PIHOLE_GID
+              value: {{ .Values.linuxserver.pgid | quote }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/pihole
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+      volumes:
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/infra/pihole/config
+{{- end }}

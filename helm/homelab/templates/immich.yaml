@@ -1,0 +1,185 @@
+# {{- if .Values.immich.enabled }}
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: immich-server
+#   namespace: tools
+# spec:
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: immich-server
+#   template:
+#     metadata:
+#       labels:
+#         app: immich-server
+#     spec:
+#       containers:
+#         - name: immich-server
+#           image: {{ .Values.immich.image }}
+#           ports:
+#             - containerPort: 2283
+#           env:
+#             - name: DB_HOSTNAME
+#               value: {{ "immich-postgres" | quote }}
+#             - name: DB_PORT
+#               value: {{ "5432" | quote }}
+#             - name: DB_DATABASE_NAME
+#               value: {{ "immich" | quote }}
+#             - name: DB_USERNAME
+#               value: {{ "immich" | quote }}
+#             - name: DB_PASSWORD
+#               value: {{ .Values.immich.dbPassword | quote }}
+#             - name: REDIS_HOSTNAME
+#               value: {{ "immich-redis" | quote }}
+#           volumeMounts:
+#             - name: upload
+#               mountPath: /usr/src/app/upload
+#       volumes:
+#         - name: upload
+#           hostPath:
+#             path: {{ .Values.paths.config }}/tools/immich/upload
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: immich-ml
+#   namespace: tools
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: immich-ml
+#   template:
+#     metadata:
+#       labels:
+#         app: immich-ml
+#     spec:
+#       containers:
+#         - name: immich-ml
+#           image: {{ .Values.immich.mlImage }}
+#           ports:
+#             - containerPort: 3003
+#           volumeMounts:
+#             - name: model-cache
+#               mountPath: /cache
+#       volumes:
+#         - name: model-cache
+#           hostPath:
+#             path: {{ .Values.paths.config }}/tools/immich/model-cache
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: immich-postgres
+#   namespace: tools
+# spec:
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: immich-postgres
+#   template:
+#     metadata:
+#       labels:
+#         app: immich-postgres
+#     spec:
+#       containers:
+#         - name: immich-postgres
+#           image: {{ .Values.immich.postgresImage }}
+#           ports:
+#             - containerPort: 5432
+#           env:
+#             - name: POSTGRES_DB
+#               value: {{ "immich" | quote }}
+#             - name: POSTGRES_USER
+#               value: {{ "immich" | quote }}
+#             - name: POSTGRES_PASSWORD
+#               value: {{ .Values.immich.dbPassword | quote }}
+#             - name: POSTGRES_INITDB_ARGS
+#               value: {{ "--data-checksums" | quote }}
+#           volumeMounts:
+#             - name: pgdata
+#               mountPath: /var/lib/postgresql/data
+#       volumes:
+#         - name: pgdata
+#           hostPath:
+#             path: {{ .Values.paths.config }}/tools/immich/pgdata
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: immich-redis
+#   namespace: tools
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: immich-redis
+#   template:
+#     metadata:
+#       labels:
+#         app: immich-redis
+#     spec:
+#       containers:
+#         - name: immich-redis
+#           image: {{ .Values.immich.redisImage }}
+#           ports:
+#             - containerPort: 6379
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich-postgres
+#   namespace: tools
+# spec:
+#   selector:
+#     app: immich-postgres
+#   ports:
+#     - port: 5432
+#       targetPort: 5432
+#   type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich-redis
+#   namespace: tools
+# spec:
+#   selector:
+#     app: immich-redis
+#   ports:
+#     - port: 6379
+#       targetPort: 6379
+#   type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich-ml
+#   namespace: tools
+# spec:
+#   selector:
+#     app: immich-ml
+#   ports:
+#     - port: 3003
+#       targetPort: 3003
+#   type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich
+#   namespace: tools
+# spec:
+#   selector:
+#     app: immich-server
+#   ports:
+#     - port: {{ .Values.immich.port }}
+#       targetPort: 2283
+#       nodePort: {{ .Values.immich.nodePort }}
+#   type: NodePort
+# {{- end }}

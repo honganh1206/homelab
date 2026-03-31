@@ -1,0 +1,58 @@
+{{- if .Values.speedtestTracker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtest-tracker
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedtest-tracker
+  template:
+    metadata:
+      labels:
+        app: speedtest-tracker
+    spec:
+      containers:
+        - name: speedtest-tracker
+          image: {{ .Values.speedtestTracker.image }}
+          ports:
+            - containerPort: {{ .Values.speedtestTracker.port }}
+          env:
+            - name: PUID
+              value: {{ .Values.linuxserver.puid | quote }}
+            - name: PGID
+              value: {{ .Values.linuxserver.pgid | quote }}
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+            - name: APP_KEY
+              value: {{ .Values.speedtestTracker.appKey | quote }}
+            - name: DB_CONNECTION
+              value: "sqlite"
+            - name: SPEEDTEST_SCHEDULE
+              value: {{ .Values.speedtestTracker.schedule | quote }}
+            - name: APP_URL
+              value: {{ .Values.speedtestTracker.appUrl | quote }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/speedtest-tracker/config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: speedtest-tracker
+  namespace: tools
+spec:
+  selector:
+    app: speedtest-tracker
+  ports:
+    - port: {{ .Values.speedtestTracker.port }}
+      targetPort: {{ .Values.speedtestTracker.port }}
+      nodePort: {{ .Values.speedtestTracker.nodePort }}
+  type: NodePort
+{{- end }}

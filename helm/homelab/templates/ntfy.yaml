@@ -1,0 +1,74 @@
+{{- if .Values.ntfy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy
+  template:
+    metadata:
+      labels:
+        app: ntfy
+    spec:
+      containers:
+        - name: ntfy
+          image: {{ .Values.ntfy.image }}
+          args: ["serve"]
+          ports:
+            - containerPort: {{ .Values.ntfy.port }}
+          env:
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - --tries=1
+                - http://localhost:80/v1/health
+                - -O
+                - "-"
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - --tries=1
+                - http://localhost:80/v1/health
+                - -O
+                - "-"
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: cache
+              mountPath: /var/cache/ntfy
+            - name: etc
+              mountPath: /etc/ntfy
+      volumes:
+        - name: cache
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/ntfy/cache
+        - name: etc
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/ntfy/etc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ntfy
+  namespace: tools
+spec:
+  selector:
+    app: ntfy
+  ports:
+    - port: {{ .Values.ntfy.port }}
+      targetPort: {{ .Values.ntfy.port }}
+      nodePort: {{ .Values.ntfy.nodePort }}
+  type: NodePort
+{{- end }}

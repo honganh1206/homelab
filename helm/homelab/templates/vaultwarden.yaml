@@ -1,0 +1,50 @@
+{{- if .Values.vaultwarden.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: tools
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      containers:
+        - name: vaultwarden
+          image: {{ .Values.vaultwarden.image }}
+          ports:
+            - containerPort: {{ .Values.vaultwarden.port }}
+          env:
+            - name: TZ
+              value: {{ .Values.linuxserver.tz | quote }}
+            - name: SIGNUPS_ALLOWED
+              value: "false"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          hostPath:
+            path: {{ .Values.paths.config }}/tools/vaultwarden/data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden
+  namespace: tools
+spec:
+  selector:
+    app: vaultwarden
+  ports:
+    - port: {{ .Values.vaultwarden.port }}
+      targetPort: {{ .Values.vaultwarden.port }}
+      nodePort: {{ .Values.vaultwarden.nodePort }}
+  type: NodePort
+{{- end }}
