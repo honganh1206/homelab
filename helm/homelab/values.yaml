@@ -314,7 +314,7 @@ speedtestTracker:
   image: lscr.io/linuxserver/speedtest-tracker:latest
   port: 80
   nodePort: 30180
-  appKey: "base64:changeme"
+  appKey: "base64:c0snjyvnhyQCk26ZBsPTWBq+9MPoj4Qq3xj04HVoY0c="
   schedule: "0 */6 * * *"
   appUrl: "http://192.168.1.105:30180"
 
