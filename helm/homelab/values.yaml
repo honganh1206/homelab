@@ -21,7 +21,7 @@ namespaces:
 
 # -- qBittorrent (torrents namespace)
 qbittorrent:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/qbittorrent:4.6.7
   webuiPort: 8080
   nodePort: 30082
@@ -33,7 +33,7 @@ qbittorrent:
 
 # -- Radarr (torrents namespace)
 radarr:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/radarr:latest
   port: 7878
   nodePort: 30878
@@ -42,7 +42,7 @@ radarr:
 
 # -- Sonarr (torrents namespace)
 sonarr:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/sonarr:latest
   port: 8989
   nodePort: 30989
@@ -51,21 +51,21 @@ sonarr:
 
 # -- Bazarr (torrents namespace)
 bazarr:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/bazarr:latest
   port: 6767
   nodePort: 30767
 
 # -- Prowlarr (torrents namespace)
 prowlarr:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/prowlarr:latest
   port: 9696
   nodePort: 30696
 
 # -- Plex (media namespace)
 plex:
-  enabled: true
+  enabled: false
   image: lscr.io/linuxserver/plex:latest
   hostNetwork: true
   privileged: true
@@ -199,21 +199,21 @@ keel:
 
 # -- Filegator (tools namespace)
 filegator:
-  enabled: true
+  enabled: false
   image: filegator/filegator:latest
   port: 8080
   nodePort: 30808
 
 # -- Pairdrop (tools namespace)
 pairdrop:
-  enabled: true
+  enabled: false
   image: linuxserver/pairdrop:latest
   port: 3000
   nodePort: 30303
 
 # -- Dex OIDC provider (infra namespace)
 dex:
-  enabled: true
+  enabled: false
   image: ghcr.io/dexidp/dex:v2.41.1
   port: 5556
   nodePort: 30556
