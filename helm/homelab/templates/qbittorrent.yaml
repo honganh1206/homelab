@@ -56,6 +56,7 @@ spec:
         - name: config
           hostPath:
             path: {{ .Values.paths.config }}/torrents/qbittorrent/config
+            type: DirectoryOrCreate
         - name: downloads
           hostPath:
             path: {{ .Values.qbittorrent.volumes.downloads }}

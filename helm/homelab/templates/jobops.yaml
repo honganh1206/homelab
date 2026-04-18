@@ -47,6 +47,7 @@ spec:
         - name: data
           hostPath:
             path: {{ .Values.paths.config }}/tools/jobops/data
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

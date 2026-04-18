@@ -90,9 +90,11 @@ spec:
         - name: data
           hostPath:
             path: {{ .Values.paths.config }}/tools/n8n/data
+            type: DirectoryOrCreate
         - name: files
           hostPath:
             path: {{ .Values.paths.config }}/tools/n8n/files
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

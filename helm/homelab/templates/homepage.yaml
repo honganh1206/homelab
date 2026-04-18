@@ -61,6 +61,7 @@ spec:
         - name: config
           hostPath:
             path: {{ .Values.paths.config }}/tools/homepage/config
+            type: DirectoryOrCreate
         - name: configmap
           configMap:
             name: homepage-config

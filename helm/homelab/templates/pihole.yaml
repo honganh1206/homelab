@@ -58,4 +58,5 @@ spec:
         - name: config
           hostPath:
             path: {{ .Values.paths.config }}/infra/pihole/config
+            type: DirectoryOrCreate
 {{- end }}

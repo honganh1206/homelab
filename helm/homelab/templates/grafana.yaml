@@ -71,6 +71,7 @@ spec:
         - name: data
           hostPath:
             path: {{ .Values.paths.config }}/infra/grafana/data
+            type: DirectoryOrCreate
         - name: datasources
           configMap:
             name: grafana-datasources
