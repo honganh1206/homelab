@@ -23,7 +23,7 @@ jobs:
             --create-namespace \
             --wait \
             --timeout 10m \
-            -rollback-on-failure
+            --rollback-on-failure
 
       - name: Verify pods
         run: kubectl get pods -A
