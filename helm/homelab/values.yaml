@@ -256,15 +256,6 @@ pihole:
   webPort: 8053
   webPassword: "changeme"
 
-# -- Caddy reverse proxy (tools namespace)
-caddy:
-  enabled: true
-  image: caddy:2-alpine
-  vaultwardenPort: 8443
-  ntfyPort: 8444
-  vaultwardenNodePort: 30443
-  ntfyNodePort: 30444
-
 # -- MinIO S3-compatible object storage (tools namespace)
 minio:
   enabled: true
