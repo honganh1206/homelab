@@ -73,6 +73,8 @@ spec:
               value: "true"
             - name: EXECUTIONS_DATA_MAX_AGE
               value: "720"
+            - name: N8N_SECURE_COOKIE
+              value: "false"
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n
