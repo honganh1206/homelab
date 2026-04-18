@@ -18,7 +18,12 @@ jobs:
           done
 
       - name: Deploy with Helm
-        run: helm upgrade --install homelab helm/homelab --create-namespace --wait --timeout 5m
+        run: |
+          helm upgrade --install homelab helm/homelab \
+            --create-namespace \
+            --wait \
+            --timeout 10m \
+            --atomic
 
       - name: Verify pods
         run: kubectl get pods -A
