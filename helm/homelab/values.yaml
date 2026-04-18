@@ -153,6 +153,12 @@ homepage:
         - name: Immich
           icon: immich.png
           port: 30283
+        - name: n8n
+          icon: n8n.png
+          port: 30567
+        - name: MinIO
+          icon: minio.png
+          port: 30901
 
 # -- IT-Tools (tools namespace)
 ittools:
@@ -331,3 +337,28 @@ vaultwarden:
   image: vaultwarden/server:latest
   port: 80
   nodePort: 30380
+
+# -- MinIO S3-compatible object storage (tools namespace)
+minio:
+  enabled: true
+  image: minio/minio:latest
+  apiPort: 9000
+  consolePort: 9001
+  apiNodePort: 30900
+  consoleNodePort: 30901
+  rootUser: minioadmin
+  rootPassword: minioadmin
+
+# -- n8n workflow automation (tools namespace)
+n8n:
+  enabled: true
+  image: n8nio/n8n:latest
+  postgresImage: postgres:16-alpine
+  port: 5678
+  nodePort: 30567
+  db:
+    name: n8n
+    user: n8n
+    password: n8n
+  s3:
+    bucket: n8n
