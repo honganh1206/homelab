@@ -37,6 +37,11 @@ spec:
           ports:
             - containerPort: {{ .Values.caddy.vaultwardenPort }}
             - containerPort: {{ .Values.caddy.ntfyPort }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.caddy.vaultwardenPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: caddyfile
               mountPath: /etc/caddy/Caddyfile

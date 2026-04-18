@@ -39,6 +39,12 @@ spec:
               value: {{ .Values.linuxserver.tz | quote }}
             - name: WEBUI_PORT
               value: {{ .Values.qbittorrent.webuiPort | quote }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.qbittorrent.webuiPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /config

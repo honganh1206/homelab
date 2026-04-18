@@ -24,6 +24,11 @@ spec:
             - "Media;/storage;yes;no;yes"
           ports:
             - containerPort: {{ .Values.samba.port }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.samba.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: media-seagate
               mountPath: /storage/SeagateExpansion

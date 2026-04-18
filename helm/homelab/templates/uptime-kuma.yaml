@@ -24,6 +24,12 @@ spec:
           env:
             - name: TZ
               value: {{ .Values.linuxserver.tz | quote }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.uptimeKuma.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /app/data

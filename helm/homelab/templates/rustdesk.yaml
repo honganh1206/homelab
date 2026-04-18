@@ -19,6 +19,11 @@ spec:
         - name: hbbr
           image: {{ .Values.rustdesk.image }}
           command: ["hbbr"]
+          readinessProbe:
+            tcpSocket:
+              port: 21117
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /root
@@ -47,6 +52,11 @@ spec:
         - name: hbbs
           image: {{ .Values.rustdesk.image }}
           command: ["hbbs", "-r", "127.0.0.1:21117"]
+          readinessProbe:
+            tcpSocket:
+              port: 21116
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /root

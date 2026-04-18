@@ -26,6 +26,12 @@ spec:
               value: {{ .Values.linuxserver.tz | quote }}
             - name: SIGNUPS_ALLOWED
               value: "false"
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: {{ .Values.vaultwarden.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /data

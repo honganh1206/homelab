@@ -63,6 +63,12 @@ spec:
             - -config.file=/etc/loki/loki.yaml
           ports:
             - containerPort: {{ .Values.loki.port }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.loki.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /etc/loki/loki.yaml

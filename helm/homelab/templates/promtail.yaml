@@ -48,6 +48,12 @@ spec:
           image: {{ .Values.promtail.image }}
           args:
             - -config.file=/etc/promtail/promtail.yaml
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.promtail.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /etc/promtail/promtail.yaml

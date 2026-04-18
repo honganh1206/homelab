@@ -48,6 +48,12 @@ spec:
           env:
             - name: HOMEPAGE_ALLOWED_HOSTS
               value: "*"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.homepage.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /app/config

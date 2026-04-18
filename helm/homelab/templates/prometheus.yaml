@@ -94,6 +94,12 @@ spec:
             - --storage.tsdb.retention.time={{ .Values.prometheus.retention }}
           ports:
             - containerPort: {{ .Values.prometheus.port }}
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: {{ .Values.prometheus.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /etc/prometheus/prometheus.yml

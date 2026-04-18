@@ -28,6 +28,11 @@ spec:
               value: {{ .Values.n8n.db.user | quote }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.n8n.db.password | quote }}
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", {{ .Values.n8n.db.user | quote }}]
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data

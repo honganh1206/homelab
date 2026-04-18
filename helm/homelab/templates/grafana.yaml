@@ -56,6 +56,12 @@ spec:
           image: {{ .Values.grafana.image }}
           ports:
             - containerPort: {{ .Values.grafana.port }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.grafana.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /var/lib/grafana

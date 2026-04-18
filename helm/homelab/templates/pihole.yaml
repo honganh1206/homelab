@@ -41,6 +41,12 @@ spec:
               value: {{ .Values.linuxserver.puid | quote }}
             - name: PIHOLE_GID
               value: {{ .Values.linuxserver.pgid | quote }}
+          readinessProbe:
+            httpGet:
+              path: /admin/
+              port: {{ .Values.pihole.webPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /etc/pihole

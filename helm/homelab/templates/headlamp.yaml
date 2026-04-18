@@ -57,6 +57,12 @@ spec:
             {{- end }}
           ports:
             - containerPort: {{ .Values.headlamp.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.headlamp.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

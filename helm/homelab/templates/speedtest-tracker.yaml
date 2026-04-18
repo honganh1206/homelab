@@ -34,6 +34,12 @@ spec:
               value: {{ .Values.speedtestTracker.schedule | quote }}
             - name: APP_URL
               value: {{ .Values.speedtestTracker.appUrl | quote }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.speedtestTracker.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /config

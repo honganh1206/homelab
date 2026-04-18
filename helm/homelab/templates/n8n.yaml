@@ -75,6 +75,12 @@ spec:
               value: "720"
             - name: N8N_SECURE_COOKIE
               value: "false"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.n8n.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - name: data
               mountPath: /home/node/.n8n

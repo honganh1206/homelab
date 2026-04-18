@@ -66,6 +66,12 @@ spec:
             - --config.file=/etc/alertmanager/alertmanager.yml
           ports:
             - containerPort: {{ .Values.alertmanager.port }}
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: {{ .Values.alertmanager.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /etc/alertmanager

@@ -23,6 +23,12 @@ spec:
             - --path.sysfs=/host/sys
           ports:
             - containerPort: {{ .Values.nodeExporter.port }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: {{ .Values.nodeExporter.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           volumeMounts:
             - name: proc
               mountPath: /host/proc
