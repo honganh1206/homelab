@@ -20,10 +20,10 @@ jobs:
       - name: Deploy with Helm
         run: |
           helm upgrade --install homelab helm/homelab \
-            --create-namespace \
-            --wait \
-            --timeout 10m \
-            --rollback-on-failure
+            --create-namespace
+            # --wait \
+            # --timeout 10m \
+            # --rollback-on-failure
 
       - name: Verify pods
         run: kubectl get pods -A
