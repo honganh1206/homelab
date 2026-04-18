@@ -1,67 +1,67 @@
-{{- if .Values.bazarr.enabled }}
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bazarr
-  namespace: torrents
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: bazarr
-  template:
-    metadata:
-      labels:
-        app: bazarr
-    spec:
-      initContainers:
-        - name: fix-permissions
-          image: busybox
-          command: ["sh", "-c", "chown -R 1000:1000 /config"]
-          volumeMounts:
-            - name: config
-              mountPath: /config
-      containers:
-        - name: bazarr
-          image: {{ .Values.bazarr.image }}
-          ports:
-            - containerPort: {{ .Values.bazarr.port }}
-          env:
-            - name: PUID
-              value: {{ .Values.linuxserver.puid | quote }}
-            - name: PGID
-              value: {{ .Values.linuxserver.pgid | quote }}
-            - name: TZ
-              value: {{ .Values.linuxserver.tz | quote }}
-          volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: movies
-              mountPath: /movies
-            - name: tvshows
-              mountPath: /tv
-      volumes:
-        - name: config
-          hostPath:
-            path: {{ .Values.paths.config }}/torrents/bazarr/config
-        - name: movies
-          hostPath:
-            path: {{ .Values.paths.seagate }}/Movies
-        - name: tvshows
-          hostPath:
-            path: {{ .Values.paths.seagate }}/Shows
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: bazarr
-  namespace: torrents
-spec:
-  selector:
-    app: bazarr
-  ports:
-    - port: {{ .Values.bazarr.port }}
-      targetPort: {{ .Values.bazarr.port }}
-      nodePort: {{ .Values.bazarr.nodePort }}
-  type: NodePort
-{{- end }}
+# {{- if .Values.bazarr.enabled }}
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: bazarr
+#   namespace: torrents
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: bazarr
+#   template:
+#     metadata:
+#       labels:
+#         app: bazarr
+#     spec:
+#       initContainers:
+#         - name: fix-permissions
+#           image: busybox
+#           command: ["sh", "-c", "chown -R 1000:1000 /config"]
+#           volumeMounts:
+#             - name: config
+#               mountPath: /config
+#       containers:
+#         - name: bazarr
+#           image: {{ .Values.bazarr.image }}
+#           ports:
+#             - containerPort: {{ .Values.bazarr.port }}
+#           env:
+#             - name: PUID
+#               value: {{ .Values.linuxserver.puid | quote }}
+#             - name: PGID
+#               value: {{ .Values.linuxserver.pgid | quote }}
+#             - name: TZ
+#               value: {{ .Values.linuxserver.tz | quote }}
+#           volumeMounts:
+#             - name: config
+#               mountPath: /config
+#             - name: movies
+#               mountPath: /movies
+#             - name: tvshows
+#               mountPath: /tv
+#       volumes:
+#         - name: config
+#           hostPath:
+#             path: {{ .Values.paths.config }}/torrents/bazarr/config
+#         - name: movies
+#           hostPath:
+#             path: {{ .Values.paths.seagate }}/Movies
+#         - name: tvshows
+#           hostPath:
+#             path: {{ .Values.paths.seagate }}/Shows
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: bazarr
+#   namespace: torrents
+# spec:
+#   selector:
+#     app: bazarr
+#   ports:
+#     - port: {{ .Values.bazarr.port }}
+#       targetPort: {{ .Values.bazarr.port }}
+#       nodePort: {{ .Values.bazarr.nodePort }}
+#   type: NodePort
+# {{- end }}
