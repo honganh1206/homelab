@@ -1,4 +1,0 @@
-{{- /*
-Namespaces are created via --create-namespace or kubectl before first deploy.
-They are not managed by this chart to avoid adoption conflicts.
-*/ -}}
