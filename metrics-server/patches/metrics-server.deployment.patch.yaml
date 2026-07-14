@@ -1,0 +1,34 @@
+# Patch metric server args
+# since we cannot override the default configs
+# so we deploy the metric service independently on the cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-server
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      # Allow the scheduler to schedule pods with matching taints
+      # so this pod will be assigned to nodes with these matching taints
+      tolerations:
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          # No pod will be scheduled onto this node
+          # unless it has a matching toleration
+          effect: "NoSchedule"
+      containers:
+        - name: metrics-server
+          args:
+            - --cert-dir=/tmp
+            # Port to connect to kubelets
+            - --secure-port=10250
+            # Priority of node addres types
+            # when determining an address for connecting to a particular node
+            - --kubelet-preferred-address-types=InternalIP
+            # Check the status port 10250
+            - --kubelet-use-node-status-port
+            - --metric-resolution=15s
+            - --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
