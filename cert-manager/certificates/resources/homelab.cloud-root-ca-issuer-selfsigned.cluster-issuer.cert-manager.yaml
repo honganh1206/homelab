@@ -1,0 +1,9 @@
+# Self-signed (Not signed by another CA) cluster-wide issuer for the root CA's certificate
+# This root CA certifies the intermediate CAs that certify other apps and services
+apiVersion: cert-manager.io/v1 # Point to cert-manager API and NOT the k3s one
+kind: ClusterIssuer # Available for all namespaces
+
+metadata:
+  name: homelab.cloud-root-ca-issuer-selfsigned
+spec:
+  selfSigned: {} # Simplest kind of issuer, but not trusted by browser

@@ -1,0 +1,22 @@
+# Certificate for Root CA
+apiVersion: cert-manager.io/v1
+kind: Certificate
+
+metadata:
+  name: homelab.cloud-root-ca-tls
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: homelab.cloud-root-ca-tls
+  secretName: homelab.cloud-root-ca-tls
+  duration: 8760h # 6 months, used to sign other so last longer than the ones generated from it
+  renewBefore: 720h # As short as possible, renew some time before expiration (15 days)
+  privateKey:
+    algorithm: ECDSA
+    size: 521
+    encoding: PKCS8
+    rotationPolicy: Always
+  issuerRef:
+    name: homelab.cloud-root-ca-issuer-selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io

@@ -15,3 +15,40 @@ Taints allow a node to repel a set of nodes.
 ## Effect
 
 How a node should treat the pod that do not tolerate that taint
+
+## Certificates
+
+Two CA certificates and a temporary cert-manager Issuer.
+
+```
+SelfSigned Issuer       ← bootstrap mechanism, not a certificate
+        │
+        ▼
+Root CA certificate     ← self-signed trust anchor
+        │
+        ▼
+Intermediate CA certificate <- sign everyday certificates
+        │
+        ▼
+Service/Ingress certificates
+```
+
+Issuer instructs cert-manager to generate a key pair (private - public) and let the new certificate sign itself.
+
+Root CA is at top of the chain and signs itself.
+
+Example: Hosting Grafana at `grafana.homelab.internal`
+
+```
+Homelab Root CA
+      │
+      │ signs
+      ▼
+Kubernetes Intermediate CA
+      │
+      │ signs
+      ▼
+grafana.homelab.internal
+```
+
+Steps: Bootstrap Self Issuer -> Create key pair for Root CA -> Install Root CA to K8S Secret -> Create Intermediate CA, signed by Root CA -> Create Grafana key-pair, signed by Intermediate CA. 
