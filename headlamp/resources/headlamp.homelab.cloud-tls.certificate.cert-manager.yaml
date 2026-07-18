@@ -1,0 +1,22 @@
+# TLS certificate for Headlamp
+apiVersion: cert-manager.io/v1
+kind: Certificate
+
+metadata:
+  name: headlamp.homelab.cloud-tls
+spec:
+  isCA: false # Leaf certificate
+  secretName: headlamp.homelab.cloud-tls
+  duration: 2190h # 3 months
+  renewBefore: 168h # Certificates must be renewed some time before they expire (7 days)
+  dnsNames:
+    - headlamp.homelab.cloud
+  privateKey:
+    algorithm: ECDSA
+    size: 256 # Chrome does not support P-521
+    encoding: PKCS8
+    rotationPolicy: Always
+  issuerRef: # Invoke the intermediate CA available in the cluster as issuer of this CA certificate
+    name: homelab.cloud-intm-ca01-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

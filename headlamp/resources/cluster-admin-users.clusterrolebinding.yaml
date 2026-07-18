@@ -1,0 +1,14 @@
+# Bind service account with the admin role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+
+metadata:
+  name: cluster-admin-users
+roleRef: # Specify cluster role to be bound as cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects: # List all users to be bound
+  - kind: ServiceAccount
+    name: headlamp-admin
+    namespace: kube-system

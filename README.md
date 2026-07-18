@@ -52,3 +52,7 @@ grafana.homelab.internal
 ```
 
 Steps: Bootstrap Self Issuer -> Create key pair for Root CA -> Install Root CA to K8S Secret -> Create Intermediate CA, signed by Root CA -> Create Grafana key-pair, signed by Intermediate CA. 
+
+## Traefik
+
+Ingress controller embedded in K3S. We enable access to our services running in our cluster throuugh Traefik ingress, instead of assigning them external IPs directly.
