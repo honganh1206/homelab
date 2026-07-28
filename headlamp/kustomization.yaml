@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
-- resources/headlamp-admin.serviceaccount.yaml
-- resources/cluster-admin-users.clusterrolebinding.yaml
-- resources/headlamp.homelab.cloud-tls.certificate.cert-manager.yaml
-- resources/headlamp.ingressroute.traefik.yaml
-- https://raw.githubusercontent.com/kubernetes-sigs/headlamp/main/kubernetes-headlamp.yaml
+  - resources/headlamp-admin.serviceaccount.yaml
+  - resources/cluster-admin-users.clusterrolebinding.yaml
+  - resources/headlamp.homelab.cloud-tls.certificate.cert-manager.yaml
+  - resources/headlamp.ingressroute.traefik.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/headlamp/main/kubernetes-headlamp.yaml
