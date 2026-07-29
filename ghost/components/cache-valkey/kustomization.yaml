@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels: # Simikar to annotations?
+  - pairs:
+      app: cache-valkey
+    includeSelectors: true # Modify existing resources, filter for patches
+    includeTemplates: true # Generate new resources by taking existing resources as blueprints
+
+resources:
+  - resources/cache-valkey.persistentvolumeclaim.yaml
+  - resources/cache-valkey.statefulset.yaml
+  - resources/cache-valkey.service.yaml
+
+replicas:
+  - name: cache-valkey
+    count: 1
+
+images:
+  - name: valkey/valkey
+    newTag: 9.0-alpine
+  - name: oliver006/redis_exporter
+    newTag: v1.80.0-alpine
+
+configMapGenerator: # Used by StatefulSet later when this is mounted
+  - name: cache-valkey-config
+    files:
+      - configs/valkey.conf
+
+secretGenerator: # Generate secrets from local data
+  - name: cache-valkey-exporter-user
+    envs:
+      - secrets/default_user_env.properties
+  - name: cache-valkey-acl
+    files:
+      - secrets/users.acl

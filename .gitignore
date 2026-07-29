@@ -8,4 +8,8 @@ plex-meta-manager/
 
 
 *.env
-users
+users*
+*.properties
+*.pwd
+
+*.production.*

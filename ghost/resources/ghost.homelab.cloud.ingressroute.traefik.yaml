@@ -1,0 +1,20 @@
+# HTTPS ingress for Ghost
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+
+metadata:
+  name: ghost.homelab.cloud
+spec:
+  entryPoints:
+    - websecure # HTTPS
+  routes:
+    - kind: Rule
+      match: Host(`ghost.homelab.cloud`)
+      services:
+        - kind: Service
+          name: server-ghost
+          passHostHeader: true
+          port: server
+          scheme: http
+  tls:
+    secretName: ghost.homelab.cloud-tls

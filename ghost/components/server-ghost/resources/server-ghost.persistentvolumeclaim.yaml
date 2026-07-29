@@ -1,0 +1,14 @@
+# Ghost server claim of persistent storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: server-ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  volumeName: ghost-ssd-srv
+  resources:
+    requests:
+      storage: 2.3G # Max 3G

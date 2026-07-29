@@ -1,0 +1,16 @@
+# Ghost Valkey claiming persistent storage
+apiVersion: v1
+kind: PersistentVolumeClaim # K8S primitive, request storage by user >< PersistentVolume provisioned by admins
+
+metadata:
+  name: cache-valkey
+spec:
+  accessModes:
+    # Specific modes supported by different kinds of volume?
+    - ReadWriteOnce
+  # Need when PV belonging to a StorageClass API object needs to be dynamically provisioned to satisfy a PVC
+  storageClassName: local-path # Provisioner is rancher.io, check with kubectl get storageclass
+  volumeName: ghost-ssd-cache
+  resources:
+    requests:
+      storage: 1.8G # Check with sudo lvs see <2G

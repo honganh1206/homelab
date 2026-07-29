@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolume # Actual data storage resource, not a request like PVC
+
+metadata:
+  name: ghost-ssd-cache
+spec:
+  capacity:
+    storage: 1.8G
+  volumeMode: Filesystem # Type of storage?
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path # rancher local provider
+  persistentVolumeReclaimPolicy: Retain # Delete PV but not the associated storage asset -> Data is preserved
+  local:
+    path: /mnt/ghost-ssd/cache/k3smnt
+  nodeAffinity: # Tell which node in the cluster a PV is binded to
+    required:
+      nodeSelectorTerms:
+        - matchExpressions: # Match with what?
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3sagent02

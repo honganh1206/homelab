@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+
+metadata:
+  name: ghost.homelab.cloud-tls
+spec:
+  isCA: false # Leaf cert
+  secretName: ghost.homelab.cloud-tls
+  duration: 2190h # 3 months
+  renewBefore: 168h # Certificates must be renewed some time before they expire (7 days)
+  dnsNames:
+    - ghost.homelab.cloud
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+    size: 256 # Chrome does not support P-521
+    rotationPolicy: Always
+  issuerRef:
+    name: homelab.cloud-intm-ca01-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
