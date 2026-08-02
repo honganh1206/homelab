@@ -43,6 +43,8 @@ grafana.homelab.internal
 
 Steps: Bootstrap Self Issuer -> Create key pair for Root CA -> Install Root CA to K8S Secret -> Create Intermediate CA, signed by Root CA -> Create Grafana key-pair, signed by Intermediate CA.
 
+> Fun fact: We did not specify which node will run `cert-manager` pods, so K3S scheduler examined the eligible nodes, filtered them based on constraints and decided k3sagent01 is the most eligible.
+
 ## Traefik
 
 Ingress controller embedded in K3S. We enable access to our services running in our cluster throuugh Traefik ingress, instead of assigning them external IPs directly.
