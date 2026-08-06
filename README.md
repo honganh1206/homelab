@@ -6,6 +6,20 @@ MetalLB is a load balancer for bare-metal K8S (although we are still running K8S
 
 Using L2 mode means all traffic for a service IP goes to one node, and `kube-proxy` spreads the traffic to service pods. This is more like failover mechanism (different nodes take care of traffic when leader node is down) than implementing a load balancer.
 
+## Storage
+
+```
+Physical disk
+└── GPT partition
+    └── LVM Physical Volume (PV)
+        └── Volume Group (VG)
+            └── Logical Volume (LV)
+                └── Filesystem
+                    └── Mounted directory
+```
+
+Rule of thumb for volume metadata: Allocate 1 MiB per 1 GiB present in the PV
+
 ## Certificates
 
 Two CA certificates and a temporary cert-manager Issuer.
@@ -48,3 +62,19 @@ Steps: Bootstrap Self Issuer -> Create key pair for Root CA -> Install Root CA t
 ## Traefik
 
 Ingress controller embedded in K3S. We enable access to our services running in our cluster throuugh Traefik ingress, instead of assigning them external IPs directly.
+
+## Monitoring
+
+We use the affinity rules to make Prometheus run on one agent node and Grafana on the other.
+
+Labels (KV pairs) attached to targets and eventually metrics, used to querying/filtering monitoring data.
+
+`__meta_` are internal labels from K8S APIs. They will be dropped unless interacted by `relabel_configs`.
+
+A lot of relabeling to get scraping done well!
+
+## Kube State Metrics (not metrics-server)
+
+An agent that gets cluster-level metrics and exposes them via a Prometheus-compatible `/metrics` endpoint
+
+Different from Prometheus Node Exporter (Expose host metrics)

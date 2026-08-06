@@ -16,8 +16,7 @@ spec:
           operator: "Exists"
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
-          # No pod will be scheduled onto this node
-          # unless it has a matching toleration
+          # This pod will be scheduled onto the server node
           effect: "NoSchedule"
       containers:
         - name: metrics-server

@@ -6,10 +6,5 @@ jellyfin/
 homarr/
 plex-meta-manager/
 
+secrets/
 
-*.env
-users*
-*.properties
-*.pwd
-
-*.production.*
