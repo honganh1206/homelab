@@ -73,6 +73,21 @@ Labels (KV pairs) attached to targets and eventually metrics, used to querying/f
 
 A lot of relabeling to get scraping done well!
 
+## Logs (for Loki)
+
+Proxmox VE: `/var/log`
+
+VM logs: `/var/log/containers` symbolic links to actual log files in `/var/log/pods`
+
+Also access container's logs with `kubectl logs -n forgejo server-forgejo-0 server`
+
+## Shell access
+
+```sh
+$ kubectl exec -it -n forgejo db-postgresql-0 -c server -- bash
+root@db-postgresql-0:/#
+```
+
 ## Kube State Metrics (not metrics-server)
 
 An agent that gets cluster-level metrics and exposes them via a Prometheus-compatible `/metrics` endpoint
