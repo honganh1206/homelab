@@ -5,6 +5,7 @@ resource "proxmox_virtual_environment_file" "k3s_agent_cloud_init" {
   datastore_id = var.snippet_datastore_id
   node_name    = var.proxmox_host
 
+  # TODO: cloud-init caused OOM on VM 124 (4 GiB)
   source_raw {
     data = <<-CLOUD_INIT
       #cloud-config
