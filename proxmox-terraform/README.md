@@ -5,12 +5,10 @@ Terraform configuration for K3s agent VMs and their Datacenter firewall aliases/
 ## Prerequisites
 
 - Terraform 1.x
-- A cloud-init-ready Proxmox VM template
+- A Proxmox VM template
 - Proxmox API token `terraform@pam!new_token_id`
 - The API token must have permission to manage VMs and Datacenter firewall objects.
 - The `ssd_disks` datastore and bridges `vmbr0` and `vmbr1` must exist.
-- The `local` datastore must have the `Snippets` content type enabled, or set `snippet_datastore_id` to a datastore that does.
-- SSH-agent access to the Proxmox node is required to upload cloud-init snippets. The default SSH user is `root`; set `proxmox_ssh_username` if needed.
 
 ## Configuration
 
@@ -19,27 +17,25 @@ Create a local `terraform.tfvars` file. Do not commit it.
 ```hcl
 template_vmid        = 9000
 pm_api_token_secret  = "<Proxmox API token secret>"
-k3s_agent_token      = "K10<cluster-ca-hash>::node:<credentials>"
-k3s_agent_version    = "v1.33.4+k3s1"
-# snippet_datastore_id = "local"
-# proxmox_ssh_username = "root"
 
 k3s_agents = {
   k3sagent01 = {
-    vmid             = 121
-    lan_ip           = "192.168.1.121"
-    k3s_ip           = "172.16.2.1"
-    node_external_ip = "10.4.2.1"
+    vmid   = 121
+    lan_ip = "192.168.1.121"
+    k3s_ip = "172.16.2.1"
 
-    # Optional defaults: 3 cores, 4096 MiB RAM, 10 GiB disk, ens19.
-    cpu_cores = 3
-    memory_mb = 4096
-    disk_gb   = 10
+    # Optional defaults: 3 cores, 4096 MiB RAM, 10 GiB per disk.
+    cpu_cores    = 3
+    memory_mb    = 4096
+    disk_gb      = 10
+    data_disk_gb = 10
   }
 }
 ```
 
-`lan_ip` is configured on `vmbr0` (net0). `k3s_ip` is configured on `vmbr1` (net1). Ensure `node_external_ip` is assigned to, and reachable from, the node before using it in K3s configuration.
+Cloud-init network configuration assigns `lan_ip` to net0 and `k3s_ip` to net1, both with a /24 prefix.
+Net0 uses gateway `192.168.1.1`. The firewall alias also uses `lan_ip`.
+Configure SSH access and k3s manually. Terraform does not supply a k3s installation script.
 
 The default Datacenter IPSet is `k3s-agents`. Terraform creates an alias named `<agent>_net0` for each agent, then adds it to the IPSet as `dc/<agent>_net0`. It also creates the VM-level `ipfilter-net0` IPSet containing that alias, which is required because net0 IP filtering is enabled.
 
@@ -85,40 +81,28 @@ terraform import \
   'pve/121'
 ```
 
-## K3s cloud-init
+## Manual node configuration
 
-For each agent, Terraform uploads a cloud-init snippet before creating the VM. On first boot it writes:
+Terraform uses an initialization drive for guest network configuration but does not generate custom cloud-init snippets or install k3s.
+Existing guest files and the manually installed k3s service remain outside Terraform management.
 
-- `/etc/rancher/config.yaml.d/config.yaml`
-- `/etc/rancher/config.yaml.d/kubelet.conf`
-- symlinks at `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/kubelet.conf`
+Before applying this change to an existing VM, review `terraform plan` for network changes and obsolete snippet deletion.
+Do not apply a plan that replaces the manually configured VM.
+Removing the configuration does not erase join tokens from historical state files. Keep those files private.
 
-The generated K3s configuration uses each agent's `k3s_ip`, `node_external_ip`, and `flannel_interface`, plus the shared `k3s_server_url` and `k3s_agent_token`. It then installs the agent with:
+## Disk storage
 
-```bash
-wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.33.4+k3s1" sh -s - agent
-```
+`scsi0` is the first virtual SCSI disk attached to the VM. This configuration uses it as the boot disk.
+`disk_gb` controls its size. `data_disk_gb` controls the second disk, `scsi1`, and defaults to 10 GiB per agent.
+Terraform does not format or mount `scsi1`. PostgreSQL and private media can use that disk after guest preparation.
 
-Set `k3s_agent_version` to change the installed version.
-
-Read the full join token from the K3s server:
-
-```bash
-sudo cat /var/lib/rancher/k3s/server/node-token
-```
-
-Prefer injecting it at runtime instead of placing it in a tfvars file:
-
-```bash
-export TF_VAR_k3s_agent_token='K10...::node:...'
-terraform apply
-```
-
-The cloud-init snippet contains the token and Terraform state therefore contains it. Keep state private and encrypted where possible.
+After enlarging a disk, expand the guest partition and filesystem if they do not grow automatically.
+If PostgreSQL and media use the boot disk instead, they share available space with the operating system, container images, and logs.
+Local PV capacities do not impose filesystem quotas. Monitor free space and keep backups outside this VM.
 
 ## Recreate or de-provision an agent
 
-Cloud-init runs during first boot. To apply changed K3s cloud-init settings, recreate the VM.
+Replacing a VM requires manual SSH access and k3s configuration on the replacement.
 
 Before replacing or removing a joined node, drain it from a K3s server:
 
@@ -139,7 +123,7 @@ To de-provision an agent, remove its entry from `k3s_agents` in `terraform.tfvar
 terraform apply
 ```
 
-Terraform destroys that VM, its firewall options and VM-level IPSet, its Datacenter alias, its cloud-init snippet, and its generated IPSet entry. Do not use a targeted destroy for normal de-provisioning because the shared IPSet must also be updated.
+Terraform destroys that VM, its firewall options and VM-level IPSet, its Datacenter alias, and its generated IPSet entry. Do not use a targeted destroy for normal de-provisioning because the shared IPSet must also be updated.
 
 ## Notes
 

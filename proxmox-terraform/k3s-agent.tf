@@ -1,61 +1,3 @@
-resource "proxmox_virtual_environment_file" "k3s_agent_cloud_init" {
-  for_each = var.k3s_agents
-
-  content_type = "snippets"
-  datastore_id = var.snippet_datastore_id
-  node_name    = var.proxmox_host
-
-  # TODO: cloud-init caused OOM on VM 124 (4 GiB)
-  source_raw {
-    data = <<-CLOUD_INIT
-      #cloud-config
-      ${yamlencode({
-    ssh_authorized_keys = [trimspace(file("~/.ssh/id_ed25519.pub"))]
-    bootcmd = [
-      ["mkdir", "-p", "/etc/rancher/config.yaml.d", "/etc/rancher/k3s"],
-      ["touch", "/etc/rancher/config.yaml.d/config.yaml", "/etc/rancher/config.yaml.d/kubelet.conf"],
-    ]
-    write_files = [
-      {
-        path        = "/etc/rancher/config.yaml.d/kubelet.conf"
-        permissions = "0600"
-        content     = <<-KUBELET_CONFIG
-              # Kubelet configuration
-              apiVersion: kubelet.config.k8s.io/v1beta1
-              kind: KubeletConfiguration
-
-              shutdownGracePeriod: 30s
-              shutdownGracePeriodCriticalPods: 10s
-            KUBELET_CONFIG
-      },
-      {
-        path        = "/etc/rancher/config.yaml.d/config.yaml"
-        permissions = "0600"
-        content     = <<-K3S_CONFIG
-              # ${each.key}
-
-              flannel-iface: "${each.value.flannel_interface}"
-              node-ip: "${each.value.k3s_ip}"
-              node-external-ip: "${each.value.node_external_ip}"
-              server: "${var.k3s_server_url}"
-              token: "${var.k3s_agent_token}"
-              kubelet-arg: "config=/etc/rancher/k3s/kubelet.conf"
-              protect-kernel-defaults: true
-            K3S_CONFIG
-      },
-    ]
-    runcmd = [
-      ["ln", "-sfn", "/etc/rancher/config.yaml.d/config.yaml", "/etc/rancher/k3s/config.yaml"],
-      ["ln", "-sfn", "/etc/rancher/config.yaml.d/kubelet.conf", "/etc/rancher/k3s/kubelet.conf"],
-      "wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION=\"${var.k3s_agent_version}\" sh -s - agent",
-    ]
-})}
-    CLOUD_INIT
-
-file_name = "${each.key}-k3s-cloud-init.yaml"
-}
-}
-
 resource "proxmox_virtual_environment_vm" "k3s_agent" {
   for_each = var.k3s_agents
 
@@ -92,8 +34,17 @@ resource "proxmox_virtual_environment_vm" "k3s_agent" {
     interface    = "scsi0"
     size         = each.value.disk_gb
     datastore_id = "ssd_disks"
+    ssd = each.value.ssd_enabled
   }
 
+  disk {
+    interface    = "scsi1"
+    size         = each.value.data_disk_gb
+    datastore_id = "ssd_disks"
+    ssd = each.value.ssd_enabled
+  }
+
+  # Cloud-init provides guest network settings only; k3s is configured manually.
   initialization {
     datastore_id = "ssd_disks"
 
@@ -109,8 +60,6 @@ resource "proxmox_virtual_environment_vm" "k3s_agent" {
         address = "${each.value.k3s_ip}/24"
       }
     }
-
-    user_data_file_id = proxmox_virtual_environment_file.k3s_agent_cloud_init[each.key].id
   }
 
   # LAN interface.
